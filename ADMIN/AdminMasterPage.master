@@ -5,16 +5,45 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
+    <link href="../Content/bootstrap.min.css" rel="stylesheet" />
     <asp:ContentPlaceHolder id="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
 <body>
     <form id="form1" runat="server">
-    <div>
+    <div class="container">
+        <nav class="navbar navbar-default" role="navigation">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">
+                        <asp:Label ID="Label1" runat="server" Text="Klub Ung"></asp:Label>
+                    </a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="Brugere.aspx">Bruger</a></li>
+                        <li><a href="Events.aspx">Events</a></li>
+                        <li><a href="Rettigheder.aspx">Rettigheder</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <asp:Button ID="ButtonLogout" CssClass="btn btn-default btn-fix" runat="server" Text="Log ud" /></li>
+                    </ul>
+                </div>
+            </nav>
         <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
         
         </asp:ContentPlaceHolder>
     </div>
     </form>
+    <script src="../Scripts/bootstrap.min.js"></script>
 </body>
 </html>
