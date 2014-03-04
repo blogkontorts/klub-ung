@@ -13,12 +13,25 @@ using System.Net;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Collections;
 
 public partial class ADMIN_Brugere : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        try
+        {
+            ArrayList UserPermissionArr = (ArrayList)Session["UserPermissions"];
+            if (UserPermissionArr.Contains("AdminBrugere"))
+            {
+                PanelAdminView.Visible = true;
+                PanelUserView.Visible = false;
+            }
+        }
+        catch
+        {
+            Response.Redirect("../login.aspx");
+        }
     }
 
     protected void OnSqlChanged(Object source, SqlDataSourceStatusEventArgs e)

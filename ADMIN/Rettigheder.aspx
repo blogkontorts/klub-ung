@@ -33,9 +33,9 @@
 
     <div class="col-sm-6">
         <asp:FormView 
-            ID="FormViewRettigheder" 
+            ID="FormViewRolle" 
             DataKeyNames="Id" 
-            DataSourceID="SqlDataSourceRettigheder" 
+            DataSourceID="SqlDataSourceRolle" 
             RenderOuterTable="False" 
             DefaultMode="ReadOnly"
             runat="server">
@@ -43,17 +43,29 @@
                 <h3><%#Eval("Navn") %></h3>
                 <h5>Rettigheder:</h5>
                 <table class="table table-hover">
-                    <tr>
-                        <asp:Repeater ID="RepeaterRettigheder" DataSourceID="SqlDataSourceRolleRettigheder" runat="server">
-                            <ItemTemplate>
+                    <asp:Repeater ID="RepeaterRettigheder" DataSourceID="SqlDataSourceRolleRettigheder" runat="server">
+                        <ItemTemplate>
+                            <tr>
                                 <td><%# Eval("Navn") %></td>
                                 <td>
-                                    <asp:LinkButton ID="LinkButtonTilfoej" CssClass="btn btn-xs btn-success" runat="server">Tilføj</asp:LinkButton>
-                                    <asp:LinkButton ID="LinkButtonFjern" CssClass="btn btn-xs btn-danger" runat="server">Fjern</asp:LinkButton>
+                                    <asp:LinkButton 
+                                        Visible='<%#!HasRight(Eval("FkFunktionerId")) %>' 
+                                        ID="LinkButtonTilfoej" 
+                                        CssClass="btn btn-xs btn-success" 
+                                        runat="server"
+                                        CommandArgument='<%#Eval("Id") %>'
+                                        OnClick="LinkButtonTilfoej_Click">Tilføj</asp:LinkButton>
+                                    <asp:LinkButton 
+                                        Visible='<%#HasRight(Eval("FkFunktionerId")) %>' 
+                                        ID="LinkButtonFjern" 
+                                        CssClass="btn btn-xs btn-danger" 
+                                        runat="server"
+                                        CommandArgument='<%#Eval("Id") %>'
+                                        OnClick="LinkButtonFjern_Click">Fjern</asp:LinkButton>
                                 </td>
-                            </ItemTemplate>
-                        </asp:Repeater>
-                    </tr>
+                            </tr>
+                        </ItemTemplate>
+                    </asp:Repeater>
                 </table>
             </ItemTemplate>
         </asp:FormView>
@@ -72,12 +84,32 @@
         SelectCommand="SELECT * FROM Roller">
     </asp:SqlDataSource>
 
+    <!--DataSource til FormViewRolle-->
+    <asp:SqlDataSource 
+        ID="SqlDataSourceRolle" 
+        runat="server" 
+        ConnectionString='<%$ ConnectionStrings:ConnectionString %>' 
+        SelectCommand="SELECT * FROM Roller WHERE Id = @Id">
+        <SelectParameters>
+            <asp:ControlParameter ControlID="GridViewRoller" Name="Id" Type="Int32" />
+        </SelectParameters>
+    </asp:SqlDataSource>
+
     <!--DataSource til RepeaterRettigheder-->
     <asp:SqlDataSource 
         ID="SqlDataSourceRolleRettigheder" 
         runat="server" 
         ConnectionString='<%$ ConnectionStrings:ConnectionString %>' 
-        SelectCommand="SELECT * FROM Funktioner">
+        SelectCommand="SELECT  *
+                       FROM Funktioner 
+                       LEFT JOIN (
+                       SELECT RollerFunktioner.FkFunktionerId
+                       FROM Roller 
+                       INNER JOIN RollerFunktioner ON Roller.Id = RollerFunktioner.FkRolleId
+                       WHERE Roller.Id = @RolleId) AS Fav ON Fav.FkFunktionerId = Funktioner.Id">
+        <SelectParameters>
+            <asp:ControlParameter ControlID="GridViewRoller" Name="RolleId" Type="Int32" />
+        </SelectParameters>
     </asp:SqlDataSource>
 </asp:Content>
 

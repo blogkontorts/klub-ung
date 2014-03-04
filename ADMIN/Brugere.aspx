@@ -358,13 +358,13 @@
         OnDeleting="SqlDataSourceFormViewEgenBrugerDetaljer_Deleting"
         OnUpdating="SqlDataSourceFormViewEgenBrugerDetaljer_Updating">
         <SelectParameters>
-            <asp:SessionParameter SessionField="BrugerId" Name="BrugerId" Type="String" />
+            <asp:SessionParameter SessionField="Id" Name="BrugerId" Type="String" />
         </SelectParameters>
         <DeleteParameters>
-            <asp:SessionParameter SessionField="BrugerId" Name="BrugerId" Type="String" />
+            <asp:SessionParameter SessionField="Id" Name="BrugerId" Type="String" />
         </DeleteParameters>
         <UpdateParameters>
-            <asp:SessionParameter SessionField="BrugerId" Name="BrugerId" Type="String" />
+            <asp:SessionParameter SessionField="Id" Name="BrugerId" Type="String" />
         </UpdateParameters>
     </asp:SqlDataSource>
 </asp:Content>
