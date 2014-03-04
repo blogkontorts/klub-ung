@@ -46,12 +46,20 @@ public partial class ADMIN_Brugere : System.Web.UI.Page
     #endregion
 
     //---------------------------------------Slet bruger
-    #region Slet instruktør
+    #region Slet bruger
     protected void SqlDataSourceBrugerDetaljer_Deleting(object sender, SqlDataSourceCommandEventArgs e)
     {
         // Hent Id på valgt avatar fra gridviewet og slet filer
         int Id = (int)GridViewBrugere.SelectedValue;
         SletFiler(Id);
+    }
+
+    protected void SqlDataSourceFormViewEgenBrugerDetaljer_Deleting(object sender, SqlDataSourceCommandEventArgs e)
+    {
+        // Hent Id på valgt avatar fra gridviewet og slet filer
+        int Id = (int)Session["BrugerId"];
+        SletFiler(Id);
+        Response.Redirect("../Default.aspx");
     }
     #endregion
 
@@ -71,7 +79,7 @@ public partial class ADMIN_Brugere : System.Web.UI.Page
     // Metode der henter filnavnet på en avatar ud fra dens Id
     private string HentFilNavn(int Id)
     {
-        SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["familien_engmark_dk_dbConnectionString"].ToString());
+        SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.Connection = conn;
         cmd.CommandText = "SELECT [Img] FROM [Brugere] WHERE [Id] = @id";
@@ -195,6 +203,34 @@ public partial class ADMIN_Brugere : System.Web.UI.Page
             e.Command.Parameters["@Img"].Value = FilNavn;
         }
     }
+
+    protected void SqlDataSourceFormViewEgenBrugerDetaljer_Updating(object sender, SqlDataSourceCommandEventArgs e)
+    {
+        // Find ASP:FileUpload og gem den i nyt object
+        FileUpload FileUploadController = FormViewEgenBruger.FindControl("FileUploadUpdateBrugerImg") as FileUpload;
+        // Hent Id på valgt avatar fra gridviewet
+        int Id = (int)Session["BrugerId"];
+
+        // Der er valgt en ny fil
+        if (FileUploadController.HasFile)
+        {
+            SletFiler(Id);
+            // Gem nye filer
+            string NytFilnavn = GemOgResize(FileUploadController);
+            // Opdater SqlDataSourcens parametre så det Nye filnavn skrives i databasen
+            e.Command.Parameters["@Img"].Value = NytFilnavn;
+
+
+        }
+        // Der er ikke valgt en ny fil
+        else
+        {
+            string FilNavn = HentFilNavn(Id);
+            // Opdater SqlDataSourcens parametre så det gamle filnavn skrives i databasen
+            e.Command.Parameters["@Img"].Value = FilNavn;
+        }
+    }
+
     #endregion
 
     //---------------------------------------Slet img
@@ -211,5 +247,5 @@ public partial class ADMIN_Brugere : System.Web.UI.Page
             File.Delete(Server.MapPath("../Thumbs/" + FilNavn));
         }
     }
-    #endregion 
+    #endregion  
 }

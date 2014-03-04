@@ -6,6 +6,7 @@
 <head runat="server">
     <title></title>
     <link href="../Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="../CSS/Overrides.css" rel="stylesheet" />
     <asp:ContentPlaceHolder id="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
@@ -29,9 +30,9 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav">
-                        <li><a href="Brugere.aspx">Bruger</a></li>
-                        <li><a href="Events.aspx">Events</a></li>
-                        <li><a href="Rettigheder.aspx">Rettigheder</a></li>
+                        <li><a href="Brugere.aspx"><span class="glyphicon glyphicon-user"></span>Bruger</a></li>
+                        <li><a href="Events.aspx"><span class="glyphicon glyphicon-star"></span>Events</a></li>
+                        <li><a href="Rettigheder.aspx"><span class="glyphicon glyphicon-list"></span>Rettigheder</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li>

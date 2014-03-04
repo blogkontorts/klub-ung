@@ -4,7 +4,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <!--Admin View Panel-->
-    <asp:Panel ID="PanelAdminView" runat="server">
+    <asp:Panel ID="PanelAdminView" runat="server" Visible="false">
         <div class="col-sm-12">
             <asp:Button ID="ButtonAddBruger" runat="server" Text="Tilføj ny Bruger" CssClass="btn btn-success" OnClick="ButtonAddInstruktor_Click"/>
         </div>
@@ -154,7 +154,7 @@
                     <tr>
                         <td>Status:</td>
                         <td><asp:DropDownList
-                                        ID="DropDownListInsertBrugerStatus"
+                                        ID="DropDownListUpdateBrugerStatus"
                                         runat="server"
                                         DataSourceID="SqlDataSourceDropDownListStatus"
                                         DataTextField="RolleNavn"
@@ -179,7 +179,99 @@
     </div>
     </asp:Panel>
     <!--Admin View End-->
-    <asp:Panel ID="PanelUserView" runat="server"></asp:Panel>
+
+    <!--Bruger/Superbruger View Panel-->
+    <asp:Panel ID="PanelUserView" runat="server">
+        <div class="col-sm-6">
+        <asp:FormView 
+            ID="FormViewEgenBruger" 
+            DataKeyNames="Id" 
+            DataSourceID="SqlDataSourceEgenBruger" 
+            RenderOuterTable="False" 
+            DefaultMode="ReadOnly"
+            runat="server">
+            <ItemTemplate>
+                <h3>Brugerdetaljer</h3>
+                <table class="table table-hover">
+                    <tr>
+                        <td>Navn:</td>
+                        <td>
+                            <asp:Label ID="LabelBrugerNavn" runat="server" Text='<%#Bind("Navn") %>'></asp:Label></td>
+                    </tr>
+                    <tr>
+                        <td>Email:</td>
+                        <td>
+                            <asp:Label ID="LabelBrugerEmail" runat="server" Text='<%#Bind("Email") %>'></asp:Label></td>
+                    </tr>
+                    <tr>
+                        <td>Password:</td>
+                        <td>
+                            <asp:Label ID="LabelBrugerPassword" runat="server" Text='<%#Bind("Passcode") %>'></asp:Label></td>
+                    </tr>
+                    <tr>
+                        <td>Status:</td>
+                        <td>
+                            <asp:Label ID="LabelBrugerStatus" runat="server" Text='<%#Bind("Status") %>'></asp:Label></td>
+                    </tr>
+                    <tr>
+                        <td>Billede:</td>
+                        <td>
+                            <asp:Label ID="LabelBrugerImg" runat="server"><img src='../Thumbs/<%#Eval("Img") %>' /></asp:Label></td>
+                    </tr>
+                </table>
+                <div class="btn-group">
+                    <asp:LinkButton
+                        ID="FormViewEdit"
+                        Text="Rediger"
+                        runat="server"
+                        CausesValidation="true"
+                        CommandName="Edit"
+                        CommandArgument='<%# Eval("Id") %>'
+                        CssClass="btn btn-warning" />
+                    <asp:LinkButton
+                        ID="FormViewDelete"
+                        Text="Slet"
+                        runat="server"
+                        CausesValidation="true"
+                        CommandName="Delete"
+                        CommandArgument='<%# Eval("Id") %>'
+                        CssClass="btn btn-danger" />
+                </div>
+            </ItemTemplate>
+            <EditItemTemplate>
+                <h3>Rediger bruger</h3>
+                <table class="table table-hover">
+                    <tr>
+                        <td>Navn:</td>
+                        <td>
+                            <asp:TextBox ID="TextBoxUpdateBrugerFornavn" CssClass="form-control" runat="server" Text='<%#Bind("Navn") %>'></asp:TextBox></td>
+                    </tr>
+                    <tr>
+                        <td>Email:</td>
+                        <td>
+                            <asp:TextBox ID="TextBoxUpdateBrugerEmail" CssClass="form-control" runat="server" Text='<%#Bind("Email") %>'></asp:TextBox></td>
+                    </tr>
+                    <tr>
+                        <td>Password:</td>
+                        <td>
+                            <asp:TextBox ID="TextBoxUpdateBrugerPassword" CssClass="form-control" runat="server" Text='<%#Bind("Passcode") %>'></asp:TextBox></td>
+                    </tr>
+                    <tr>
+                        <td>Billede:</td>
+                        <td>
+                            <asp:Label ID="LabelUpdateBrugerImg" runat="server" Text=""><img src='../Thumbs/<%#Eval("Img") %>' /></asp:Label>
+                            <asp:FileUpload ID="FileUploadUpdateBrugerImg" runat="server" FileName='<%# Bind("Img") %>' /></td>
+                    </tr>
+                </table>
+                <div class="btn-group">
+                        <asp:LinkButton runat="server" Text="Gem" CommandName="Update" ID="InsertButton" CausesValidation="True" CssClass="btn btn-success"/>
+                        <asp:LinkButton runat="server" Text="Annuller" CommandName="Cancel" ID="InsertCancelButton" CausesValidation="False" CssClass="btn btn-default"/>
+                </div>
+            </EditItemTemplate>
+        </asp:FormView>
+    </div>
+    </asp:Panel>
+    <!--Bruger/Superbruger View End-->
 
     <!--
         -------------
@@ -191,7 +283,7 @@
     <asp:SqlDataSource 
         ID="SqlDataSourceBrugere" 
         runat="server" 
-        ConnectionString='<%$ ConnectionStrings:familien_engmark_dk_dbConnectionString %>' 
+        ConnectionString='<%$ ConnectionStrings:ConnectionString %>' 
         SelectCommand="SELECT [Brugere].[Id], 
                               [Brugere].[Navn], 
                               [Roller].[Navn] AS [Status] 
@@ -204,7 +296,7 @@
     <asp:SqlDataSource 
         ID="SqlDataSourceBrugerDetaljer" 
         runat="server" 
-        ConnectionString='<%$ ConnectionStrings:familien_engmark_dk_dbConnectionString %>'
+        ConnectionString='<%$ ConnectionStrings:ConnectionString %>'
         SelectCommand="SELECT Brugere.Id, Brugere.Navn, Email, Passcode, Roller.Navn AS Status, Roller.Id AS RolleId, Img 
                        FROM Brugere JOIN Roller ON FkRolleId = Roller.Id 
                        WHERE Brugere.Id = @BrugerId"
@@ -243,8 +335,37 @@
     <asp:SqlDataSource 
         ID="SqlDataSourceDropDownListStatus" 
         runat="server"
-        ConnectionString="<%$ ConnectionStrings:familien_engmark_dk_dbConnectionString %>"
+        ConnectionString="<%$ ConnectionStrings:ConnectionString %>"
         SelectCommand="SELECT Id AS RolleId, Navn AS RolleNavn FROM Roller ORDER BY RolleId DESC">
+    </asp:SqlDataSource>
+
+    <!--DataSource til FormViewEgenBruger-->
+    <asp:SqlDataSource 
+        ID="SqlDataSourceEgenBruger" 
+        runat="server" 
+        ConnectionString='<%$ ConnectionStrings:ConnectionString %>'
+        SelectCommand="SELECT Brugere.Id, Brugere.Navn, Email, Passcode, Roller.Navn AS Status, Roller.Id AS RolleId, Img 
+                       FROM Brugere JOIN Roller ON FkRolleId = Roller.Id 
+                       WHERE Brugere.Id = @BrugerId"
+        UpdateCommand="UPDATE Brugere 
+                       SET Navn = @Navn, 
+                           Email = @Email, 
+                           Passcode = @Passcode 
+                       WHERE Brugere.Id = @BrugerId"
+        DeleteCommand = "UPDATE Brugere
+                         SET Slettet = 1
+                         WHERE Brugere.Id = @BrugerId"
+        OnDeleting="SqlDataSourceFormViewEgenBrugerDetaljer_Deleting"
+        OnUpdating="SqlDataSourceFormViewEgenBrugerDetaljer_Updating">
+        <SelectParameters>
+            <asp:SessionParameter SessionField="BrugerId" Name="BrugerId" Type="String" />
+        </SelectParameters>
+        <DeleteParameters>
+            <asp:SessionParameter SessionField="BrugerId" Name="BrugerId" Type="String" />
+        </DeleteParameters>
+        <UpdateParameters>
+            <asp:SessionParameter SessionField="BrugerId" Name="BrugerId" Type="String" />
+        </UpdateParameters>
     </asp:SqlDataSource>
 </asp:Content>
 
