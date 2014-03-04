@@ -139,7 +139,7 @@
                     <tr>
                         <td>Navn:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxUpdateBrugerFornavn" CssClass="form-control" runat="server" Text='<%#Bind("Fornavn") %>'></asp:TextBox></td>
+                            <asp:TextBox ID="TextBoxUpdateBrugerFornavn" CssClass="form-control" runat="server" Text='<%#Bind("Navn") %>'></asp:TextBox></td>
                     </tr>
                     <tr>
                         <td>Email:</td>
@@ -154,7 +154,7 @@
                     <tr>
                         <td>Status:</td>
                         <td><asp:DropDownList
-                                        ID="DropDownListUpdateBrugerStatus"
+                                        ID="DropDownListInsertBrugerStatus"
                                         runat="server"
                                         DataSourceID="SqlDataSourceDropDownListStatus"
                                         DataTextField="RolleNavn"
@@ -205,7 +205,7 @@
         ID="SqlDataSourceBrugerDetaljer" 
         runat="server" 
         ConnectionString='<%$ ConnectionStrings:familien_engmark_dk_dbConnectionString %>'
-        SelectCommand="SELECT Brugere.Id, Brugere.Navn, Email, Passcode, Roller.Navn AS Status, Img 
+        SelectCommand="SELECT Brugere.Id, Brugere.Navn, Email, Passcode, Roller.Navn AS Status, Roller.Id AS RolleId, Img 
                        FROM Brugere JOIN Roller ON FkRolleId = Roller.Id 
                        WHERE Brugere.Id = @BrugerId"
         InsertCommand="INSERT INTO Brugere (Navn, Email, Passcode, Img, FkRolleId) 
@@ -214,7 +214,7 @@
                        SET Navn = @Navn, 
                            Email = @Email, 
                            Passcode = @Passcode, 
-                           FkAdgangId = @AdgangId
+                           FkRolleId = @RolleId
                        WHERE Brugere.Id = @BrugerId"
         DeleteCommand = "UPDATE Brugere
                          SET Slettet = 1
