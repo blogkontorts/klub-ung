@@ -1,9 +1,7 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
-
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head runat="server">
+    <!DOCTYPE html>
     <title></title>
     <asp:ContentPlaceHolder id="head" runat="server">
     

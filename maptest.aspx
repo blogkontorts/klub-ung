@@ -107,12 +107,11 @@
                     // Create a marker for each place.
                     var marker = new google.maps.Marker({
                         map: map,
-                        icon: image,
                         title: place.name,
                         position: place.geometry.location
                     });
 
-                    markers.push(marker);
+                    markers.push(markerx);
 
                     bounds.extend(place.geometry.location);
                 }
