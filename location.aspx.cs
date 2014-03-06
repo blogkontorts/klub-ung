@@ -19,7 +19,7 @@ public partial class location : System.Web.UI.Page
     public string ConvertDataTabletoString() {
         DataTable dt = new DataTable();
         using(SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ToString())) {
-            using(SqlCommand cmd = new SqlCommand("select title=City,lat=lat,lng=long,description from Location", con)) {
+            using(SqlCommand cmd = new SqlCommand("SELECT lat,long,Navn,Beskrivelse FROM EventLocation INNER JOIN [Events] ON EventLocation.Id = [Events].FkLokationId", con)) {
                 con.Open();
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
