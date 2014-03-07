@@ -60,20 +60,21 @@
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
     <script>
 
-        //var datatable;
-        //var map;
-        //var mapOptions
-        //var infowindow;
-        //var defaultlatlog;
-        //var input;
-        //var searchBox;
-        //var places;
-        //var defaultBounds;
+        var datatable;
+        var map;
+        var mapOptions
+        var infowindow;
+        var defaultlatlog;
+        var input;
+        var searchBox;
+        var places;
+        var defaultBounds;
 
         function InitializeMap() {
-            //MakeMap();
-            //showEvents();
-            scarchForLocation();
+            MakeMap();
+            showEvents();
+            makeScarchField();
+            addListeners();
         }
 
 
@@ -109,30 +110,22 @@
             }
         }
        
-        function scarchForLocation() {
-            var markers = [];
-            var map = new google.maps.Map(document.getElementById('map-canvas'), {
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            });
-
-            var defaultBounds = new google.maps.LatLngBounds(
-                new google.maps.LatLng(-33.8902, 151.1759),
-                new google.maps.LatLng(-33.8474, 151.2631));
-            map.fitBounds(defaultBounds);
-
+        function makeScarchField() {
+            markers = [];
             // Create the search box and link it to the UI element.
-            var input = /** @type {HTMLInputElement} */(
+            input = /** @type {HTMLInputElement} */(
                 document.getElementById('pac-input'));
             map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-            var searchBox = new google.maps.places.SearchBox(
+            searchBox = new google.maps.places.SearchBox(
               /** @type {HTMLInputElement} */(input));
-
+        }
+        function addListeners(){
             // [START region_getplaces]
             // Listen for the event fired when the user selects an item from the
             // pick list. Retrieve the matching places for that item.
             google.maps.event.addListener(searchBox, 'places_changed', function () {
-                var places = searchBox.getPlaces();
+                places = searchBox.getPlaces();
 
                 for (var i = 0, marker; marker = markers[i]; i++) {
                     marker.setMap(null);
@@ -140,29 +133,30 @@
 
                 // For each place, get the icon, place name, and location.
                 markers = [];
-                var bounds = new google.maps.LatLngBounds();
+                bounds = new google.maps.LatLngBounds();
                 for (var i = 0, place; place = places[i]; i++) {
-                    var image = {
-                        url: place.icon,
-                        size: new google.maps.Size(71, 71),
-                        origin: new google.maps.Point(0, 0),
-                        anchor: new google.maps.Point(17, 34),
-                        scaledSize: new google.maps.Size(25, 25)
-                    };
-
                     // Create a marker for each place.
                     var marker = new google.maps.Marker({
                         map: map,
                         title: place.name,
                         position: place.geometry.location
                     });
-
                     markers.push(marker);
-
                     bounds.extend(place.geometry.location);
                 }
 
-                map.fitBounds(bounds);
+                if (markers.length > 1) {
+                    map.fitBounds(bounds);
+                } else {
+                    map.setOptions({
+                        zoom: 12,
+                        center: markers[0].getPosition()
+                    });
+                }
+
+                document.getElementById('lat').textContent = markers[0].getPosition().lat();
+                document.getElementById('long').textContent = markers[0].getPosition().lng();
+
             });
             // [END region_getplaces]
 
@@ -186,7 +180,8 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <%-- Skjult input box der skal være der ellers laver siden et postback når man trykker på enter
          hvilket gør at siden ikke kan lave søgn  --%>
-    <input type="text" style="display:none"/>
+    <input id="lat" type="text" style="display:none"/>
+    <input id="long" type="text" style="display:none"/>
     <input id="pac-input" class="controls" type="text" placeholder="Search Box" onSubmit="return false;"/>
     <div id="map-canvas"></div>
 </asp:Content>
