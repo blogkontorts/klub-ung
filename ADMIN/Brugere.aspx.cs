@@ -33,6 +33,7 @@ public partial class ADMIN_Brugere : System.Web.UI.Page
             Response.Redirect("../login.aspx");
         }
     }
+    Validering Validator = new Validering();
 
     protected void OnSqlChanged(Object source, SqlDataSourceStatusEventArgs e)
     {
@@ -41,7 +42,7 @@ public partial class ADMIN_Brugere : System.Web.UI.Page
 
     //---------------------------------------Tilføj bruger
     #region Tilføj bruger
-    protected void ButtonAddInstruktor_Click(object sender, EventArgs e)
+    protected void ButtonAddBruger_Click(object sender, EventArgs e)
     {
         FormViewBrugerDetaljer.ChangeMode(FormViewMode.Insert);
     }
@@ -70,9 +71,15 @@ public partial class ADMIN_Brugere : System.Web.UI.Page
     protected void SqlDataSourceFormViewEgenBrugerDetaljer_Deleting(object sender, SqlDataSourceCommandEventArgs e)
     {
         // Hent Id på valgt avatar fra gridviewet og slet filer
-        int Id = (int)Session["BrugerId"];
+        int Id = (int)Session["Id"];
         SletFiler(Id);
-        Response.Redirect("../Default.aspx");
+    }
+
+    //Redirecter og logger ud når ens egen bruger slettes
+    protected void SqlDataSourceEgenBruger_Deleted(object sender, SqlDataSourceStatusEventArgs e)
+    {
+        Session.Abandon();
+        Response.Redirect("../login.aspx");
     }
     #endregion
 
@@ -222,7 +229,7 @@ public partial class ADMIN_Brugere : System.Web.UI.Page
         // Find ASP:FileUpload og gem den i nyt object
         FileUpload FileUploadController = FormViewEgenBruger.FindControl("FileUploadUpdateBrugerImg") as FileUpload;
         // Hent Id på valgt avatar fra gridviewet
-        int Id = (int)Session["BrugerId"];
+        int Id = (int)Session["Id"];
 
         // Der er valgt en ny fil
         if (FileUploadController.HasFile)
@@ -261,4 +268,48 @@ public partial class ADMIN_Brugere : System.Web.UI.Page
         }
     }
     #endregion  
+    
+    //---------------------------------------Søgning
+    #region Search + datasource switching
+    protected void LinkButtonSearch_Click(object sender, EventArgs e)
+    {
+        GridViewBrugere.DataSourceID = null;
+        GridViewBrugere.DataSource = SqlDataSourceSearch;
+        GridViewBrugere.DataBind();
+        LinkButtonCancelSearch.Visible = true;
+    }
+    protected void LinkButtonCancelSearch_Click(object sender, EventArgs e)
+    {
+        GridViewBrugere.DataSourceID = null;
+        GridViewBrugere.DataSource = SqlDataSourceBrugere;
+        GridViewBrugere.DataBind();
+        TextBoxSearch.Text = "";
+        LinkButtonCancelSearch.Visible = false;
+    }
+    #endregion
+
+    //---------------------------------------Validering
+    #region Validering
+    protected void FormViewBrugerDetaljer_ItemInserting(object sender, FormViewInsertEventArgs e)
+    {
+        FormView Form = (FormView)sender as FormView;
+        Validate(Form, "Insert", e);
+
+    }
+    protected void FormViewBrugerDetaljer_ItemUpdating(object sender, FormViewUpdateEventArgs e)
+    {
+        FormView Form = (FormView)sender as FormView;
+        Validate(Form, "Update", e);
+    }
+
+    protected void Validate(FormView Form, string Action, dynamic e)
+    {
+        //Valider unikt navn og at det er udfyldt
+        Validator.ValidateUniqeness(Form, "TextBox" + Action + "BrugerNavn", "Brugere", "Navn", "Id", e);
+        //Valider at password er udfyldt
+        Validator.ValidateEmpty("TextBox" + Action + "BrugerPassword", e, Form);
+        //Valider at email er udfyldt og er en gyldig email
+        Validator.ValidatePattern("TextBox" + Action + "BrugerEmail", e, Form, @"^(?("")("".+?""@)|(([0-9a-zA-Z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-zA-Z])@))(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,6}))$", "Indtast gyldig email");
+    }
+    #endregion
 }

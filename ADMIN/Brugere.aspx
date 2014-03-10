@@ -6,10 +6,19 @@
     <!--Admin View Panel-->
     <asp:Panel ID="PanelAdminView" runat="server" Visible="false">
         <div class="col-sm-12">
-            <asp:Button ID="ButtonAddBruger" runat="server" Text="Tilføj ny Bruger" CssClass="btn btn-success" OnClick="ButtonAddInstruktor_Click"/>
+            <asp:Button ID="ButtonAddBruger" runat="server" Text="Tilføj ny Bruger" CssClass="btn btn-success" OnClick="ButtonAddBruger_Click"/>
         </div>
         <div class="col-sm-6">
             <h3>Brugere</h3>
+            <div class="input-group input-group-lg Search">
+                <span class="input-group-btn">
+                    <asp:LinkButton ID="LinkButtonSearch" CssClass="btn btn-info" runat="server" OnClick="LinkButtonSearch_Click"><span class="glyphicon glyphicon-search"></span></asp:LinkButton>
+                </span>
+                <asp:TextBox ID="TextBoxSearch" CssClass="form-control" runat="server"></asp:TextBox>
+                <span class="input-group-btn">
+                    <asp:LinkButton ID="LinkButtonCancelSearch" Visible="false" CssClass="btn btn-danger" runat="server" OnClick="LinkButtonCancelSearch_Click"><span class="glyphicon glyphicon-remove"></span></asp:LinkButton>
+                </span>
+            </div>
             <asp:GridView
                 ID="GridViewBrugere"
                 runat="server"
@@ -29,7 +38,7 @@
                     <asp:TemplateField ShowHeader="False">
                         <ItemTemplate>
                             <div class="btn-group right-fix">
-                                <asp:LinkButton ID="LinkButtonEdit" runat="server" CausesValidation="False" CommandName="Select" Text="Se Detaljer" CssClass="btn btn-xs btn-primary right"></asp:LinkButton>
+                                <asp:LinkButton ID="LinkButtonEdit" runat="server" CausesValidation="False" CommandName="Select" Text="Se Detaljer" CssClass="btn btn-xs btn-primary"></asp:LinkButton>
                             </div>
                         </ItemTemplate>
                     </asp:TemplateField>
@@ -38,12 +47,14 @@
         </div>
 
         <div class="col-sm-6">
-        <asp:FormView 
+            <asp:FormView 
             ID="FormViewBrugerDetaljer" 
             DataKeyNames="Id" 
             DataSourceID="SqlDataSourceBrugerDetaljer" 
             RenderOuterTable="False" 
-            runat="server">
+            runat="server"
+            OnItemInserting="FormViewBrugerDetaljer_ItemInserting"
+            OnItemUpdating="FormViewBrugerDetaljer_ItemUpdating">
             <ItemTemplate>
                 <h3>Brugerdetaljer</h3>
                 <table class="table table-hover">
@@ -98,17 +109,23 @@
                     <tr>
                         <td>Navn:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxInsertBrugerEfternavn" CssClass="form-control" runat="server" Text='<%#Bind("Navn") %>'></asp:TextBox></td>
+                            <asp:TextBox ID="TextBoxInsertBrugerNavn" CssClass="form-control" runat="server" Text='<%#Bind("Navn") %>'></asp:TextBox>
+                            <asp:Label ID="TextBoxInsertBrugerNavnMsg" runat="server" Text=""></asp:Label>
+                        </td>
                     </tr>
                     <tr>
                         <td>Email:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxInsertBrugerEmail" CssClass="form-control" runat="server" Text='<%#Bind("Email") %>'></asp:TextBox></td>
+                            <asp:TextBox ID="TextBoxInsertBrugerEmail" CssClass="form-control" runat="server" Text='<%#Bind("Email") %>'></asp:TextBox>
+                            <asp:Label ID="TextBoxInsertBrugerEmailMsg" runat="server" Text=""></asp:Label>
+                        </td>
                     </tr>
                     <tr>
                         <td>Password:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxInsertBrugerPassword" CssClass="form-control" runat="server" Text='<%#Bind("Passcode") %>'></asp:TextBox></td>
+                            <asp:TextBox ID="TextBoxInsertBrugerPassword" CssClass="form-control" runat="server" Text='<%#Bind("Passcode") %>'></asp:TextBox>
+                            <asp:Label ID="TextBoxInsertBrugerPasswordMsg" runat="server" Text=""></asp:Label>
+                        </td>
                     </tr>
                     <tr>
                         <td>Status:</td>
@@ -139,17 +156,23 @@
                     <tr>
                         <td>Navn:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxUpdateBrugerFornavn" CssClass="form-control" runat="server" Text='<%#Bind("Navn") %>'></asp:TextBox></td>
+                            <asp:TextBox ID="TextBoxUpdateBrugerNavn" CssClass="form-control" runat="server" Text='<%#Bind("Navn") %>'></asp:TextBox>
+                            <asp:Label ID="TextBoxUpdateBrugerNavnMsg" runat="server" Text=""></asp:Label>
+                        </td>
                     </tr>
                     <tr>
                         <td>Email:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxUpdateBrugerEmail" CssClass="form-control" runat="server" Text='<%#Bind("Email") %>'></asp:TextBox></td>
+                            <asp:TextBox ID="TextBoxUpdateBrugerEmail" CssClass="form-control" runat="server" Text='<%#Bind("Email") %>'></asp:TextBox>
+                            <asp:Label ID="TextBoxUpdateBrugerEmailMsg" runat="server" Text=""></asp:Label>
+                        </td>
                     </tr>
                     <tr>
                         <td>Password:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxUpdateBrugerPassword" CssClass="form-control" runat="server" Text='<%#Bind("Passcode") %>'></asp:TextBox></td>
+                            <asp:TextBox ID="TextBoxUpdateBrugerPassword" CssClass="form-control" runat="server" Text='<%#Bind("Passcode") %>'></asp:TextBox>
+                            <asp:Label ID="TextBoxUpdateBrugerPasswordMsg" runat="server" Text=""></asp:Label>
+                        </td>
                     </tr>
                     <tr>
                         <td>Status:</td>
@@ -176,7 +199,7 @@
                 </div>
             </EditItemTemplate>
         </asp:FormView>
-    </div>
+        </div>
     </asp:Panel>
     <!--Admin View End-->
 
@@ -189,7 +212,8 @@
             DataSourceID="SqlDataSourceEgenBruger" 
             RenderOuterTable="False" 
             DefaultMode="ReadOnly"
-            runat="server">
+            runat="server"
+            OnItemUpdating="FormViewBrugerDetaljer_ItemUpdating">
             <ItemTemplate>
                 <h3>Brugerdetaljer</h3>
                 <table class="table table-hover">
@@ -244,17 +268,23 @@
                     <tr>
                         <td>Navn:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxUpdateBrugerFornavn" CssClass="form-control" runat="server" Text='<%#Bind("Navn") %>'></asp:TextBox></td>
+                            <asp:TextBox ID="TextBoxUpdateBrugerNavn" CssClass="form-control" runat="server" Text='<%#Bind("Navn") %>'></asp:TextBox>
+                            <asp:Label ID="TextBoxUpdateBrugerNavnMsg" runat="server" Text=""></asp:Label>
+                        </td>
                     </tr>
                     <tr>
                         <td>Email:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxUpdateBrugerEmail" CssClass="form-control" runat="server" Text='<%#Bind("Email") %>'></asp:TextBox></td>
+                            <asp:TextBox ID="TextBoxUpdateBrugerEmail" CssClass="form-control" runat="server" Text='<%#Bind("Email") %>'></asp:TextBox>
+                            <asp:Label ID="TextBoxUpdateBrugerEmailMsg" runat="server" Text=""></asp:Label>
+                        </td>
                     </tr>
                     <tr>
                         <td>Password:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxUpdateBrugerPassword" CssClass="form-control" runat="server" Text='<%#Bind("Passcode") %>'></asp:TextBox></td>
+                            <asp:TextBox ID="TextBoxUpdateBrugerPassword" CssClass="form-control" runat="server" Text='<%#Bind("Passcode") %>'></asp:TextBox>
+                            <asp:Label ID="TextBoxUpdateBrugerPasswordMsg" runat="server" Text=""></asp:Label>
+                        </td>
                     </tr>
                     <tr>
                         <td>Billede:</td>
@@ -292,6 +322,22 @@
                       WHERE Slettet = 0">
     </asp:SqlDataSource>
 
+    <!--DataSource til Søgning-->
+    <asp:SqlDataSource 
+        ID="SqlDataSourceSearch" 
+        runat="server" 
+        ConnectionString='<%$ ConnectionStrings:ConnectionString %>' 
+        SelectCommand="SELECT [Brugere].[Id], 
+                              [Brugere].[Navn], 
+                              [Roller].[Navn] AS [Status] 
+                      FROM [Brugere] 
+                           JOIN [Roller] ON [FkRolleId] = [Roller].[Id]
+                      WHERE Slettet = 0 AND Brugere.Navn LIKE '%'+@Search+'%'">
+        <SelectParameters>
+            <asp:ControlParameter ControlID="TextBoxSearch" Name="Search" Type="String" DefaultValue="%" />
+        </SelectParameters>
+    </asp:SqlDataSource>
+
     <!--DataSource til FormViewBrugerDetaljer-->
     <asp:SqlDataSource 
         ID="SqlDataSourceBrugerDetaljer" 
@@ -306,7 +352,8 @@
                        SET Navn = @Navn, 
                            Email = @Email, 
                            Passcode = @Passcode, 
-                           FkRolleId = @RolleId
+                           FkRolleId = @RolleId,
+                           Img = @Img
                        WHERE Brugere.Id = @BrugerId"
         DeleteCommand = "UPDATE Brugere
                          SET Slettet = 1
@@ -331,7 +378,7 @@
         </UpdateParameters>
     </asp:SqlDataSource>
 
-    <!--DataSource til DropDownListInsertBrugerStatus-->
+    <!--DataSource til DropDownListInsert/UpdateBrugerStatus-->
     <asp:SqlDataSource 
         ID="SqlDataSourceDropDownListStatus" 
         runat="server"
@@ -350,13 +397,15 @@
         UpdateCommand="UPDATE Brugere 
                        SET Navn = @Navn, 
                            Email = @Email, 
-                           Passcode = @Passcode 
+                           Passcode = @Passcode,
+                           Img = @Img 
                        WHERE Brugere.Id = @BrugerId"
         DeleteCommand = "UPDATE Brugere
                          SET Slettet = 1
                          WHERE Brugere.Id = @BrugerId"
         OnDeleting="SqlDataSourceFormViewEgenBrugerDetaljer_Deleting"
-        OnUpdating="SqlDataSourceFormViewEgenBrugerDetaljer_Updating">
+        OnUpdating="SqlDataSourceFormViewEgenBrugerDetaljer_Updating"
+        OnDeleted="SqlDataSourceEgenBruger_Deleted">
         <SelectParameters>
             <asp:SessionParameter SessionField="Id" Name="BrugerId" Type="String" />
         </SelectParameters>

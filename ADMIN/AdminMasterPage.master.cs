@@ -16,9 +16,6 @@ public partial class ADMIN_AdminMasterPage : System.Web.UI.MasterPage
 
         if (UserPermissionArr.Contains("AdminRettigheder"))
             HyperLinkRettigheder.Visible = true;
-
-        if (UserPermissionArr.Contains("Godkend"))
-            HyperLinkGodkendelser.Visible = true;
     }
 
     protected void ButtonLogout_Click(object sender, EventArgs e)
