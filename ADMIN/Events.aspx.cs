@@ -50,6 +50,7 @@ public partial class ADMIN_Events : System.Web.UI.Page
 
 
     //Opdaterer gridviews ved ændringer
+    #region gridviewstyring
     protected void OnSqlChanged(Object source, SqlDataSourceStatusEventArgs e)
     {
         if(GetRights().Contains("AdminEvents"))
@@ -58,6 +59,14 @@ public partial class ADMIN_Events : System.Web.UI.Page
             GridViewEgneEvents.DataBind();
     }
 
+    protected void UpdateFormView(object sender, EventArgs e)
+    {
+        if (GetRights().Contains("AdminEvents"))
+            FormViewEventDetaljer.ChangeMode(FormViewMode.ReadOnly);
+        else
+            FormViewEgenEventDetaljer.ChangeMode(FormViewMode.ReadOnly);
+    }
+    #endregion
     //Check om en given event er godkendt eller ej
     //Return: Bool
     protected bool IsApproved(object Eval)
@@ -141,14 +150,6 @@ public partial class ADMIN_Events : System.Web.UI.Page
             // Opdater SqlDataSourcens parametre så det Nye filnavn skrives i databasen
             e.Command.Parameters["@Img"].Value = NytFilnavn;
         }
-
-        //Hjælper til at sikre ordentligt input til datoer
-        TextBox StartDato = FormViewEgenEventDetaljer.FindControl("TextBoxFra") as TextBox;
-        e.Command.Parameters["@StartDato"].Value = DateTime.Parse(StartDato.Text);
-
-        TextBox SlutDato = FormViewEgenEventDetaljer.FindControl("TextBoxTil") as TextBox;
-        e.Command.Parameters["@SlutDato"].Value = DateTime.Parse(SlutDato.Text);
-
     }
     #endregion
 
@@ -303,14 +304,6 @@ public partial class ADMIN_Events : System.Web.UI.Page
     #region update img
     protected void SqlDataSourceEventDetaljer_Updating(object sender, SqlDataSourceCommandEventArgs e)
     {
-        //Hjælper til at sikre ordentligt input til datoer
-        TextBox StartDatoUpdate = FormViewEventDetaljer.FindControl("TextBoxUpdateFra") as TextBox;
-        e.Command.Parameters["@StartDato"].Value = DateTime.Parse(StartDatoUpdate.Text);
-
-        TextBox SlutDatoUpdate = FormViewEventDetaljer.FindControl("TextBoxUpdateTil") as TextBox;
-        e.Command.Parameters["@SlutDato"].Value = DateTime.Parse(SlutDatoUpdate.Text);
-
-
         // Find ASP:FileUpload og gem den i nyt object
         FileUpload FileUploadController = FormViewEventDetaljer.FindControl("FileUploadUpdateEventImg") as FileUpload;
         // Hent Id på valgt avatar fra gridviewet
@@ -448,6 +441,120 @@ public partial class ADMIN_Events : System.Web.UI.Page
         Validator.ValidatePattern("TextBox"+Action+"EventPostnr", e, Form, @"^\d{4}$", "Udfyld et postnummer");
         //Valider at beskrivelsen er udfyldt
         Validator.ValidateEmpty("TextBox"+Action+"EventBeskrivelse", e, Form);
+    }
+    #endregion
+
+    //---------------------------------------Styring af Insert kalenderen
+    #region Styring af insert calendar
+    protected void ImageButtonPrevYear_Click(object sender, ImageClickEventArgs e)
+    {
+        ChangeDate(-12, "CalendarInsertEventFra");
+    }
+    protected void ImageButtonPrevMonth_Click(object sender, ImageClickEventArgs e)
+    {
+        ChangeDate(-1, "CalendarInsertEventFra");
+    }
+    protected void ImageButtonNextMonth_Click(object sender, ImageClickEventArgs e)
+    {
+        ChangeDate(1, "CalendarInsertEventFra");
+    }
+    protected void ImageButtonNextYear_Click(object sender, ImageClickEventArgs e)
+    {
+        ChangeDate(12, "CalendarInsertEventFra");
+    }
+    #endregion
+
+    //---------------------------------------Styring af Update kalenderen
+    #region Styring af update calendar
+    protected void ImageButtonUpdateNextYear_Click(object sender, ImageClickEventArgs e)
+    {
+        ChangeDate(12, "CalendarUpdateEventFra");
+    }
+    protected void ImageButtonUpdateNextMonth_Click(object sender, ImageClickEventArgs e)
+    {
+        ChangeDate(1, "CalendarUpdateEventFra");
+    }
+    protected void ImageButtonUpdatePrevMonth_Click(object sender, ImageClickEventArgs e)
+    {
+        ChangeDate(-1, "CalendarUpdateEventFra");
+    }
+    protected void ImageButtonUpdatePrevYear_Click(object sender, ImageClickEventArgs e)
+    {
+        ChangeDate(-12, "CalendarUpdateEventFra");
+    }
+    #endregion
+
+    //---------------------------------------Hjælpemetoder til kalendere
+    #region hjælpemetoder til kalendere
+    //Ændrer dato på diverse kalendere
+    protected void ChangeDate(int change, string Calendar)
+    {
+        if (GetRights().Contains("AdminEvents"))
+        {
+            Calendar Cal = FormViewEventDetaljer.FindControl(Calendar) as Calendar;
+            Cal.VisibleDate = Cal.VisibleDate.AddMonths(change);
+        }
+        else
+        {
+            Calendar Cal = FormViewEgenEventDetaljer.FindControl(Calendar) as Calendar;
+            Cal.VisibleDate = Cal.VisibleDate.AddMonths(change);
+        }        
+    }
+
+    //sørger for at man ikke kan vælge "i går" eller før
+    protected void CheckFromDate(dynamic e)
+    {
+        if (e.Day.Date < DateTime.Today)
+        {
+            e.Day.IsSelectable = false;
+            e.Cell.BackColor = Color.Gray;
+        }
+    }
+
+    //Sørger for at man ikke kan vælge en dag der ligger før begyndelsesdatoen
+    protected void CheckToDate(FormView Form, string Action, dynamic e)
+    {
+        Calendar FraCalendar = Form.FindControl("Calendar"+Action+"EventFra") as Calendar;
+        DateTime FraDate = FraCalendar.SelectedDate;
+        if (e.Day.Date < FraDate || e.Day.Date < DateTime.Today)
+        {
+            e.Day.IsSelectable = false;
+            e.Cell.BackColor = Color.Gray;
+        }
+    }
+
+    //Kald til at sørge for udelukkelse af "ugyldige" datoer på givne kalendere
+    protected void CalendarInsertEventFra_DayRender(object sender, DayRenderEventArgs e)
+    {
+        CheckFromDate(e);
+    }
+    protected void CalendarInsertEventTil_DayRender(object sender, DayRenderEventArgs e)
+    {
+        CheckToDate(FormViewEventDetaljer, "Insert", e);
+    }
+    protected void CalendarUpdateEventTil_DayRender(object sender, DayRenderEventArgs e)
+    {
+        CheckToDate(FormViewEventDetaljer, "Update", e);
+    }
+    protected void CalendarUpdateEventFra_DayRender(object sender, DayRenderEventArgs e)
+    {
+        CheckFromDate(e);
+    }
+    protected void CalendarInsertEgenEventFra_DayRender(object sender, DayRenderEventArgs e)
+    {
+        CheckFromDate(e);
+    }
+    protected void CalendarInsertEgenEventTil_DayRender(object sender, DayRenderEventArgs e)
+    {
+        CheckToDate(FormViewEgenEventDetaljer, "Insert", e);
+    }
+    protected void CalendarUpdateEgenEventFra_DayRender(object sender, DayRenderEventArgs e)
+    {
+        CheckFromDate(e);
+    }
+    protected void CalendarUpdateEgenEventTil_DayRender(object sender, DayRenderEventArgs e)
+    {
+        CheckToDate(FormViewEgenEventDetaljer, "Update", e);
     }
     #endregion
 }

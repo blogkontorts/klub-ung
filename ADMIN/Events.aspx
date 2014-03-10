@@ -82,7 +82,7 @@
                     <asp:TemplateField ShowHeader="False">
                         <ItemTemplate>
                             <div class="btn-group right-fix">
-                                <asp:LinkButton ID="LinkButtonEdit" runat="server" CausesValidation="False" CommandName="Select" Text="Se Detaljer" CssClass="btn btn-xs btn-primary"></asp:LinkButton>
+                                <asp:LinkButton ID="LinkButtonEdit" runat="server" CausesValidation="False" CommandName="Select" Text="Se Detaljer" CssClass="btn btn-xs btn-primary" OnClick="UpdateFormView"></asp:LinkButton>
                             </div>
                         </ItemTemplate>
                     </asp:TemplateField>
@@ -208,13 +208,41 @@
                     <tr>
                         <td>Fra:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxFra" CssClass="form-control" TextMode="DateTime" placeholder="dd-mm-åååå 00:00 ex: 13-5-2014 16:30" runat="server" Text='<%#Bind("StartDato") %>'></asp:TextBox>
+                            <asp:ImageButton ID="ImageButtonPrevYearFra" runat="server" ImageUrl="~/Images/darrowcutleft.png" OnClick="ImageButtonPrevYear_Click" />
+                            <asp:ImageButton ID="ImageButtonPrevMonthFra" runat="server" ImageUrl="~/Images/arrowcutleft.png" OnClick="ImageButtonPrevMonth_Click" />
+                            <asp:ImageButton ID="ImageButtonNextMonthFra" runat="server" ImageUrl="~/Images/arrowcut.png" OnClick="ImageButtonNextMonth_Click" />
+                            <asp:ImageButton ID="ImageButtonNextYearFra" runat="server" ImageUrl="~/Images/darrowcut.png" OnClick="ImageButtonNextYear_Click" />
+                            <asp:Calendar 
+                                ID="CalendarInsertEventFra" 
+                                runat="server" 
+                                SelectedDate='<%#Bind("StartDato") %>' 
+                                VisibleDate="<%#DateTime.Now %>" 
+                                ShowNextPrevMonth="false" 
+                                TitleStyle-BackColor="#428bca" 
+                                Font-Names="Verdana" 
+                                OtherMonthDayStyle-BackColor="#cccccc" 
+                                TodayDayStyle-BackColor="#5cb85c"
+                                OnDayRender="CalendarInsertEventFra_DayRender"></asp:Calendar>
                         </td>
                     </tr>
                     <tr>
                         <td>Til:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxTil" CssClass="form-control" TextMode="DateTime" placeholder="dd-mm-åååå 00:00 ex: 13-5-2014 16:30" runat="server" Text='<%#Bind("SlutDato") %>'></asp:TextBox>
+                            <asp:ImageButton ID="ImageButtonPrevYearTil" runat="server" ImageUrl="~/Images/darrowcutleft.png" OnClick="ImageButtonPrevYear_Click" />
+                            <asp:ImageButton ID="ImageButtonPrevMonthTil" runat="server" ImageUrl="~/Images/arrowcutleft.png" OnClick="ImageButtonPrevMonth_Click" />
+                            <asp:ImageButton ID="ImageButtonNextMonthTil" runat="server" ImageUrl="~/Images/arrowcut.png" OnClick="ImageButtonNextMonth_Click" />
+                            <asp:ImageButton ID="ImageButtonNextYearTil" runat="server" ImageUrl="~/Images/darrowcut.png" OnClick="ImageButtonNextYear_Click" />
+                            <asp:Calendar 
+                                ID="CalendarInsertEventTil" 
+                                runat="server" 
+                                SelectedDate='<%#Bind("SlutDato") %>' 
+                                VisibleDate="<%#DateTime.Now %>" 
+                                ShowNextPrevMonth="false" 
+                                TitleStyle-BackColor="#428bca" 
+                                Font-Names="Verdana" 
+                                OtherMonthDayStyle-BackColor="#cccccc" 
+                                TodayDayStyle-BackColor="#5cb85c"
+                                OnDayRender="CalendarInsertEventTil_DayRender"></asp:Calendar>
                         </td>
                     </tr>
                     <tr>
@@ -293,12 +321,44 @@
                     <tr>
                         <td>Fra:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxUpdateFra" CssClass="form-control" TextMode="DateTime" placeholder="dd-mm-åååå 00:00 ex: 13-5-2014 16:30" runat="server" Text='<%#Bind("StartDato") %>'></asp:TextBox></td>
+                            <asp:ImageButton ID="ImageButtonUpdatePrevYearFra" runat="server" ImageUrl="~/Images/darrowcutleft.png" OnClick="ImageButtonUpdatePrevYear_Click" />
+                            <asp:ImageButton ID="ImageButtonUpdatePrevMonthFra" runat="server" ImageUrl="~/Images/arrowcutleft.png" OnClick="ImageButtonUpdatePrevMonth_Click" />
+                            <asp:ImageButton ID="ImageButtonUpdateNextMonthFra" runat="server" ImageUrl="~/Images/arrowcut.png" OnClick="ImageButtonUpdateNextMonth_Click" />
+                            <asp:ImageButton ID="ImageButtonUpdateNextYearFra" runat="server" ImageUrl="~/Images/darrowcut.png" OnClick="ImageButtonUpdateNextYear_Click" />
+                            <asp:Calendar 
+                                ID="CalendarUpdateEventFra" 
+                                runat="server" 
+                                SelectedDate='<%#Bind("StartDato") %>'
+                                VisibleDate='<%#Eval("StartDato") %>' 
+                                ShowNextPrevMonth="false" 
+                                TitleStyle-BackColor="#428bca" 
+                                Font-Names="Verdana" 
+                                OtherMonthDayStyle-BackColor="#cccccc" 
+                                TodayDayStyle-BackColor="#5cb85c"
+                                OnDayRender="CalendarUpdateEventFra_DayRender"></asp:Calendar>
+                            <asp:Label ID="LabelUpdateEventFra" runat="server" Text='<%#"Nuværende: " + Eval("StartDato", "{0:d}") %>'></asp:Label>
+                        </td>
                     </tr>
                     <tr>
                         <td>Til:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxUpdateTil" CssClass="form-control" TextMode="DateTime" placeholder="dd-mm-åååå 00:00 ex: 13-5-2014 16:30" runat="server" Text='<%#Bind("SlutDato") %>'></asp:TextBox></td>
+                            <asp:ImageButton ID="ImageButtonUpdatePrevYearTil" runat="server" ImageUrl="~/Images/darrowcutleft.png" OnClick="ImageButtonUpdatePrevYear_Click" />
+                            <asp:ImageButton ID="ImageButtonUpdatePrevMonthTil" runat="server" ImageUrl="~/Images/arrowcutleft.png" OnClick="ImageButtonUpdatePrevMonth_Click" />
+                            <asp:ImageButton ID="ImageButtonUpdateNextMonthTil" runat="server" ImageUrl="~/Images/arrowcut.png" OnClick="ImageButtonUpdateNextMonth_Click" />
+                            <asp:ImageButton ID="ImageButtonUpdateNextYearTil" runat="server" ImageUrl="~/Images/darrowcut.png" OnClick="ImageButtonUpdateNextYear_Click" />
+                            <asp:Calendar 
+                                ID="CalendarUpdateEventTil" 
+                                runat="server" 
+                                SelectedDate='<%#Bind("SlutDato") %>'
+                                VisibleDate='<%#Eval("SlutDato") %>' 
+                                ShowNextPrevMonth="false" 
+                                TitleStyle-BackColor="#428bca" 
+                                Font-Names="Verdana" 
+                                OtherMonthDayStyle-BackColor="#cccccc" 
+                                TodayDayStyle-BackColor="#5cb85c"
+                                OnDayRender="CalendarUpdateEventTil_DayRender"></asp:Calendar>
+                            <asp:Label ID="LabelUpdateEventTil" runat="server" Text='<%#"Nuværende: " + Eval("SlutDato", "{0:d}") %>'></asp:Label>
+                        </td>
                     </tr>
                     <tr>
                         <td>Kategori:</td>
@@ -424,7 +484,7 @@
                     <asp:TemplateField ShowHeader="False">
                         <ItemTemplate>
                             <div class="btn-group right-fix">
-                                <asp:LinkButton ID="LinkButtonEdit" runat="server" CausesValidation="False" CommandName="Select" Text="Se Detaljer" CssClass="btn btn-xs btn-primary"></asp:LinkButton>
+                                <asp:LinkButton ID="LinkButtonEdit" runat="server" CausesValidation="False" CommandName="Select" Text="Se Detaljer" CssClass="btn btn-xs btn-primary" OnClick="UpdateFormView"></asp:LinkButton>
                             </div>
                         </ItemTemplate>
                     </asp:TemplateField>
@@ -538,12 +598,42 @@
                     <tr>
                         <td>Fra:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxFra" CssClass="form-control" TextMode="DateTime" placeholder="dd-mm-åååå 00:00 ex: 13-5-2014 16:30" runat="server" Text='<%#Bind("StartDato") %>'></asp:TextBox></td>
+                            <asp:ImageButton ID="ImageButtonPrevYearFra" runat="server" ImageUrl="~/Images/darrowcutleft.png" OnClick="ImageButtonPrevYear_Click" />
+                            <asp:ImageButton ID="ImageButtonPrevMonthFra" runat="server" ImageUrl="~/Images/arrowcutleft.png" OnClick="ImageButtonPrevMonth_Click" />
+                            <asp:ImageButton ID="ImageButtonNextMonthFra" runat="server" ImageUrl="~/Images/arrowcut.png" OnClick="ImageButtonNextMonth_Click" />
+                            <asp:ImageButton ID="ImageButtonNextYearFra" runat="server" ImageUrl="~/Images/darrowcut.png" OnClick="ImageButtonNextYear_Click" />
+                            <asp:Calendar 
+                                ID="CalendarInsertEventFra" 
+                                runat="server" 
+                                SelectedDate='<%#Bind("StartDato") %>' 
+                                VisibleDate="<%#DateTime.Now %>" 
+                                ShowNextPrevMonth="false" 
+                                TitleStyle-BackColor="#428bca" 
+                                Font-Names="Verdana" 
+                                OtherMonthDayStyle-BackColor="#cccccc" 
+                                TodayDayStyle-BackColor="#5cb85c"
+                                OnDayRender="CalendarInsertEgenEventFra_DayRender"></asp:Calendar>
+                        </td>
                     </tr>
                     <tr>
                         <td>Til:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxTil" CssClass="form-control" TextMode="DateTime" placeholder="dd-mm-åååå 00:00 ex: 13-5-2014 16:30" runat="server" Text='<%#Bind("SlutDato") %>'></asp:TextBox></td>
+                            <asp:ImageButton ID="ImageButtonPrevYearTil" runat="server" ImageUrl="~/Images/darrowcutleft.png" OnClick="ImageButtonPrevYear_Click" />
+                            <asp:ImageButton ID="ImageButtonPrevMonthTil" runat="server" ImageUrl="~/Images/arrowcutleft.png" OnClick="ImageButtonPrevMonth_Click" />
+                            <asp:ImageButton ID="ImageButtonNextMonthTil" runat="server" ImageUrl="~/Images/arrowcut.png" OnClick="ImageButtonNextMonth_Click" />
+                            <asp:ImageButton ID="ImageButtonNextYearTil" runat="server" ImageUrl="~/Images/darrowcut.png" OnClick="ImageButtonNextYear_Click" />
+                            <asp:Calendar 
+                                ID="CalendarInsertEventTil" 
+                                runat="server" 
+                                SelectedDate='<%#Bind("SlutDato") %>' 
+                                VisibleDate="<%#DateTime.Now %>" 
+                                ShowNextPrevMonth="false" 
+                                TitleStyle-BackColor="#428bca" 
+                                Font-Names="Verdana" 
+                                OtherMonthDayStyle-BackColor="#cccccc" 
+                                TodayDayStyle-BackColor="#5cb85c"
+                                OnDayRender="CalendarInsertEgenEventTil_DayRender"></asp:Calendar>
+                        </td>
                     </tr>
                     <tr>
                         <td>Kategori:</td>
@@ -615,12 +705,44 @@
                     <tr>
                         <td>Fra:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxUpdateFra" CssClass="form-control" TextMode="DateTime" placeholder="dd-mm-åååå 00:00 ex: 13-5-2014 16:30" runat="server" Text='<%#Bind("StartDato") %>'></asp:TextBox></td>
+                            <asp:ImageButton ID="ImageButtonUpdatePrevYearFra" runat="server" ImageUrl="~/Images/darrowcutleft.png" OnClick="ImageButtonUpdatePrevYear_Click" />
+                            <asp:ImageButton ID="ImageButtonUpdatePrevMonthFra" runat="server" ImageUrl="~/Images/arrowcutleft.png" OnClick="ImageButtonUpdatePrevMonth_Click" />
+                            <asp:ImageButton ID="ImageButtonUpdateNextMonthFra" runat="server" ImageUrl="~/Images/arrowcut.png" OnClick="ImageButtonUpdateNextMonth_Click" />
+                            <asp:ImageButton ID="ImageButtonUpdateNextYearFra" runat="server" ImageUrl="~/Images/darrowcut.png" OnClick="ImageButtonUpdateNextYear_Click" />
+                            <asp:Calendar 
+                                ID="CalendarUpdateEventFra" 
+                                runat="server" 
+                                SelectedDate='<%#Bind("StartDato") %>'
+                                VisibleDate='<%#Eval("StartDato") %>' 
+                                ShowNextPrevMonth="false" 
+                                TitleStyle-BackColor="#428bca" 
+                                Font-Names="Verdana" 
+                                OtherMonthDayStyle-BackColor="#cccccc" 
+                                TodayDayStyle-BackColor="#5cb85c"
+                                OnDayRender="CalendarUpdateEgenEventFra_DayRender"></asp:Calendar>
+                            <asp:Label ID="LabelUpdateEventFra" runat="server" Text='<%#"Nuværende: " + Eval("StartDato", "{0:d}") %>'></asp:Label>
+                        </td>
                     </tr>
                     <tr>
                         <td>Til:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxUpdateTil" CssClass="form-control" TextMode="DateTime" placeholder="dd-mm-åååå 00:00 ex: 13-5-2014 16:30" runat="server" Text='<%#Bind("SlutDato") %>'></asp:TextBox></td>
+                            <asp:ImageButton ID="ImageButtonUpdatePrevYearTil" runat="server" ImageUrl="~/Images/darrowcutleft.png" OnClick="ImageButtonUpdatePrevYear_Click" />
+                            <asp:ImageButton ID="ImageButtonUpdatePrevMonthTil" runat="server" ImageUrl="~/Images/arrowcutleft.png" OnClick="ImageButtonUpdatePrevMonth_Click" />
+                            <asp:ImageButton ID="ImageButtonUpdateNextMonthTil" runat="server" ImageUrl="~/Images/arrowcut.png" OnClick="ImageButtonUpdateNextMonth_Click" />
+                            <asp:ImageButton ID="ImageButtonUpdateNextYearTil" runat="server" ImageUrl="~/Images/darrowcut.png" OnClick="ImageButtonUpdateNextYear_Click" />
+                            <asp:Calendar 
+                                ID="CalendarUpdateEventTil" 
+                                runat="server" 
+                                SelectedDate='<%#Bind("SlutDato") %>'
+                                VisibleDate='<%#Eval("SlutDato") %>' 
+                                ShowNextPrevMonth="false" 
+                                TitleStyle-BackColor="#428bca" 
+                                Font-Names="Verdana" 
+                                OtherMonthDayStyle-BackColor="#cccccc" 
+                                TodayDayStyle-BackColor="#5cb85c"
+                                OnDayRender="CalendarUpdateEgenEventTil_DayRender"></asp:Calendar>
+                            <asp:Label ID="LabelUpdateEventTil" runat="server" Text='<%#"Nuværende: " + Eval("SlutDato", "{0:d}") %>'></asp:Label>
+                        </td>
                     </tr>
                     <tr>
                         <td>Kategori:</td>
@@ -730,6 +852,7 @@
                                          SlutDato = @SlutDato,
                                          Img = @Img,
                                          FkBrugerId = @BrugerId,
+                                         Godkendt = @Bypass,
                                          FkKategoriId = @KategoriId,
                                          Bynavn = @Bynavn,
                                          Postnr = @Postnr
@@ -817,6 +940,7 @@
                                          StartDato = @StartDato,
                                          SlutDato = @SlutDato,
                                          Img = @Img,
+                                         Godkendt = @Bypass,
                                          FkBrugerId = @BrugerId,
                                          FkKategoriId = @KategoriId,
                                          Bynavn = @Bynavn,
