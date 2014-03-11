@@ -75,6 +75,7 @@
             showEvents();
             makeScarchField();
             addListeners();
+            document.getElementById('brugDennePosition').disabled = true;
         }
 
 
@@ -162,6 +163,7 @@
         function addListeners() {
             google.maps.event.addListener(searchBox, 'places_changed', function() {
                 Search();
+                document.getElementById('brugDennePosition').disabled = false;
             });
 
             // Bias the SearchBox results towards places that are within the bounds of the
@@ -169,16 +171,12 @@
             google.maps.event.addListener(map, 'bounds_changed', function () {
                 var bounds = map.getBounds();
                 searchBox.setBounds(bounds);
-
-                document.getElementById('brugDennePosition').disabled = false;
             });
         }
 
         function checkChanged(tfValue) {
             document.getElementById('brugDennePosition').disabled = true;
         }
-
-
 
         google.maps.event.addDomListener(window, 'load', InitializeMap);
     </script>
@@ -193,8 +191,7 @@
     <input id="long" type="text" style="display:none"/>
 
     <input id="pac-input" class="controls" type="text" placeholder="Search Box" onkeypress="checkChanged( this );"/>
-    <button id ="submit" type ="submit" disabled="">submit</button>
-    <script>document.getElementById('brugDennePosition').disabled = true;</script>
+    <button id ="brugDennePosition" type ="submit">submit</button>
     <div id="map-canvas"></div>
 </asp:Content>
 
