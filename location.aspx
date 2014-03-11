@@ -120,57 +120,65 @@
             searchBox = new google.maps.places.SearchBox(
               /** @type {HTMLInputElement} */(input));
         }
-        function addListeners() {
+
+        function Search() {
             // [START region_getplaces]
             // Listen for the event fired when the user selects an item from the
-            // pick list. Retrieve the matching places for that item.
-            google.maps.event.addListener(searchBox, 'places_changed', function () {
-                places = searchBox.getPlaces();
+            // pick list. Retrieve the matching places for that item.  
+            places = searchBox.getPlaces();
 
-                for (var i = 0, marker; marker = markers[i]; i++) {
-                    marker.setMap(null);
-                }
+            for (var i = 0, marker; marker = markers[i]; i++) {
+                marker.setMap(null);
+            }
 
-                // For each place, get the icon, place name, and location.
-                markers = [];
-                bounds = new google.maps.LatLngBounds();
-                for (var i = 0, place; place = places[i]; i++) {
-                    // Create a marker for each place.
-                    var marker = new google.maps.Marker({
-                        map: map,
-                        title: place.name,
-                        position: place.geometry.location
-                    });
-                    markers.push(marker);
-                    bounds.extend(place.geometry.location);
-                }
+            // For each place, get the icon, place name, and location.
+            markers = [];
+            bounds = new google.maps.LatLngBounds();
+            for (var i = 0, place; place = places[i]; i++) {
+                // Create a marker for each place.
+                var marker = new google.maps.Marker({
+                    map: map,
+                    title: place.name,
+                    position: place.geometry.location
+                });
+                markers.push(marker);
+                bounds.extend(place.geometry.location);
+            }
 
-                if (markers.length > 1) {
-                    map.fitBounds(bounds);
-                } else {
-                    map.setOptions({
-                        zoom: 12,
-                        center: markers[0].getPosition()
-                    });
-                }
+            if (markers.length > 1) {
+                map.fitBounds(bounds);
+            } else {
+                map.setOptions({
+                    zoom: 12,
+                    center: markers[0].getPosition()
+                });
+            }
 
-                document.getElementById('lat').textContent = markers[0].getPosition().lat();
-                document.getElementById('long').textContent = markers[0].getPosition().lng();
+            document.getElementById('lat').textContent = markers[0].getPosition().lat();
+            document.getElementById('long').textContent = markers[0].getPosition().lng();
+        };
+        // [END region_getplaces]
 
+        function addListeners() {
+            google.maps.event.addListener(searchBox, 'places_changed', function() {
+                Search();
             });
-            // [END region_getplaces]
 
             // Bias the SearchBox results towards places that are within the bounds of the
             // current map's viewport.
             google.maps.event.addListener(map, 'bounds_changed', function () {
                 var bounds = map.getBounds();
                 searchBox.setBounds(bounds);
+
+                document.getElementById('submit').disabled = false;
             });
         }
 
-        function myFunction() {
-            //do stuff
+        function checkChanged(tfValue) {
+            document.getElementById('submit').disabled = true;
         }
+
+
 
         google.maps.event.addDomListener(window, 'load', InitializeMap);
     </script>
@@ -180,9 +188,12 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <%-- Skjult input box der skal være der ellers laver siden et postback når man trykker på enter
          hvilket gør at siden ikke kan lave søgn  --%>
+
     <input id="lat" type="text" style="display:none"/>
     <input id="long" type="text" style="display:none"/>
-    <input id="pac-input" class="controls" type="text" placeholder="Search Box" onSubmit="return false;"/>
+
+    <input id="pac-input" class="controls" type="text" placeholder="Search Box" onkeypress="checkChanged( this );"/>
+    <button id ="submit" type ="submit" disabled="disabled">submit</button>
     <div id="map-canvas"></div>
 </asp:Content>
 

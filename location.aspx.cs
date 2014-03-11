@@ -12,8 +12,8 @@ public partial class location : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-
     }
+
 
     // This method is used to convert datatable to json string
     public string ConvertDataTabletoString() {
@@ -36,5 +36,8 @@ public partial class location : System.Web.UI.Page
                 return serializer.Serialize(rows);
             }
         }
+    }
+    protected void submit_Click(object sender, EventArgs e) {
+
     }
 }
