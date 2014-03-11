@@ -6,6 +6,7 @@
 <head runat="server">
     <title></title>
     <link href="../Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="../CSS/Overrides.css" rel="stylesheet" />
     <asp:ContentPlaceHolder id="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
@@ -21,21 +22,22 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">
-                        <asp:Label ID="Label1" runat="server" Text="Klub Ung"></asp:Label>
+                    <a class="navbar-brand">
+                        <asp:Label ID="LabelKlubUng" runat="server" Text="Klub Ung"></asp:Label>
                     </a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav">
-                        <li><a href="Brugere.aspx">Bruger</a></li>
-                        <li><a href="Events.aspx">Events</a></li>
-                        <li><a href="Rettigheder.aspx">Rettigheder</a></li>
-                    </ul>
+                        <li><a href="Brugere.aspx"><span class="glyphicon glyphicon-user"></span> Bruger</a></li>
+                        <li><a href="Events.aspx"><span class="glyphicon glyphicon-star"></span> Events</a></li>
+                        <li>
+                            <asp:HyperLink ID="HyperLinkRettigheder" Visible="false" runat="server" NavigateUrl="~/ADMIN/Rettigheder.aspx"><span class="glyphicon glyphicon-list"></span> Rettigheder</asp:HyperLink></li>
+                        </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <asp:Button ID="ButtonLogout" CssClass="btn btn-default btn-fix" runat="server" Text="Log ud" /></li>
+                            <asp:Button ID="ButtonLogout" CssClass="btn btn-default btn-fix" runat="server" Text="Log ud" OnClick="ButtonLogout_Click" /></li>
                     </ul>
                 </div>
             </nav>
@@ -45,5 +47,6 @@
     </div>
     </form>
     <script src="../Scripts/bootstrap.min.js"></script>
+    <script src="../Scripts/jquery-1.9.1.min.js"></script>
 </body>
 </html>
