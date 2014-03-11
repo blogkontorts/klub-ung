@@ -134,6 +134,7 @@
 
             // For each place, get the icon, place name, and location.
             markers = [];
+            address = [];
             bounds = new google.maps.LatLngBounds();
             for (var i = 0, place; place = places[i]; i++) {
                 // Create a marker for each place.
@@ -142,6 +143,7 @@
                     title: place.name,
                     position: place.geometry.location
                 });
+                address.push(place.formatted_address);
                 markers.push(marker);
                 bounds.extend(place.geometry.location);
             }
@@ -154,9 +156,12 @@
                     center: markers[0].getPosition()
                 });
             }
-
-            document.getElementById('lat').textContent = markers[0].getPosition().lat();
-            document.getElementById('long').textContent = markers[0].getPosition().lng();
+            document.getElementById('address').value = address[0];
+            document.getElementById('lat').value = markers[0].getPosition().lat();
+            document.getElementById('long').value = markers[0].getPosition().lng();
+            window.alert(document.getElementById('lat').value);
+            window.alert(document.getElementById('long').value);
+            window.alert(document.getElementById('address').value);
         };
         // [END region_getplaces]
 
@@ -186,10 +191,9 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <%-- Skjult input box der skal være der ellers laver siden et postback når man trykker på enter
          hvilket gør at siden ikke kan lave søgn  --%>
-
-    <input id="lat" type="text" style="display:none"/>
-    <input id="long" type="text" style="display:none"/>
-
+    <input id="lat" name="lat" type="hidden"/>
+    <input id="long" name="long" type="hidden"/>
+    <input id="address" name="address" type="hidden"/>
     <input id="pac-input" class="controls" type="text" placeholder="Search Box" onkeypress="checkChanged( this );"/>
     <button id ="brugDennePosition" type ="submit">submit</button>
     <div id="map-canvas"></div>
