@@ -13,13 +13,27 @@ using System.Net;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Collections;
 
 public partial class ADMIN_Brugere : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        try
+        {
+            ArrayList UserPermissionArr = (ArrayList)Session["UserPermissions"];
+            if (UserPermissionArr.Contains("AdminBrugere"))
+            {
+                PanelAdminView.Visible = true;
+                PanelUserView.Visible = false;
+            }
+        }
+        catch
+        {
+            Response.Redirect("../login.aspx");
+        }
     }
+    Validering Validator = new Validering();
 
     protected void OnSqlChanged(Object source, SqlDataSourceStatusEventArgs e)
     {
@@ -28,7 +42,7 @@ public partial class ADMIN_Brugere : System.Web.UI.Page
 
     //---------------------------------------Tilføj bruger
     #region Tilføj bruger
-    protected void ButtonAddInstruktor_Click(object sender, EventArgs e)
+    protected void ButtonAddBruger_Click(object sender, EventArgs e)
     {
         FormViewBrugerDetaljer.ChangeMode(FormViewMode.Insert);
     }
@@ -46,12 +60,26 @@ public partial class ADMIN_Brugere : System.Web.UI.Page
     #endregion
 
     //---------------------------------------Slet bruger
-    #region Slet instruktør
+    #region Slet bruger
     protected void SqlDataSourceBrugerDetaljer_Deleting(object sender, SqlDataSourceCommandEventArgs e)
     {
         // Hent Id på valgt avatar fra gridviewet og slet filer
         int Id = (int)GridViewBrugere.SelectedValue;
         SletFiler(Id);
+    }
+
+    protected void SqlDataSourceFormViewEgenBrugerDetaljer_Deleting(object sender, SqlDataSourceCommandEventArgs e)
+    {
+        // Hent Id på valgt avatar fra gridviewet og slet filer
+        int Id = (int)Session["Id"];
+        SletFiler(Id);
+    }
+
+    //Redirecter og logger ud når ens egen bruger slettes
+    protected void SqlDataSourceEgenBruger_Deleted(object sender, SqlDataSourceStatusEventArgs e)
+    {
+        Session.Abandon();
+        Response.Redirect("../login.aspx");
     }
     #endregion
 
@@ -71,7 +99,7 @@ public partial class ADMIN_Brugere : System.Web.UI.Page
     // Metode der henter filnavnet på en avatar ud fra dens Id
     private string HentFilNavn(int Id)
     {
-        SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["familien_engmark_dk_dbConnectionString"].ToString());
+        SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.Connection = conn;
         cmd.CommandText = "SELECT [Img] FROM [Brugere] WHERE [Id] = @id";
@@ -195,6 +223,34 @@ public partial class ADMIN_Brugere : System.Web.UI.Page
             e.Command.Parameters["@Img"].Value = FilNavn;
         }
     }
+
+    protected void SqlDataSourceFormViewEgenBrugerDetaljer_Updating(object sender, SqlDataSourceCommandEventArgs e)
+    {
+        // Find ASP:FileUpload og gem den i nyt object
+        FileUpload FileUploadController = FormViewEgenBruger.FindControl("FileUploadUpdateBrugerImg") as FileUpload;
+        // Hent Id på valgt avatar fra gridviewet
+        int Id = (int)Session["Id"];
+
+        // Der er valgt en ny fil
+        if (FileUploadController.HasFile)
+        {
+            SletFiler(Id);
+            // Gem nye filer
+            string NytFilnavn = GemOgResize(FileUploadController);
+            // Opdater SqlDataSourcens parametre så det Nye filnavn skrives i databasen
+            e.Command.Parameters["@Img"].Value = NytFilnavn;
+
+
+        }
+        // Der er ikke valgt en ny fil
+        else
+        {
+            string FilNavn = HentFilNavn(Id);
+            // Opdater SqlDataSourcens parametre så det gamle filnavn skrives i databasen
+            e.Command.Parameters["@Img"].Value = FilNavn;
+        }
+    }
+
     #endregion
 
     //---------------------------------------Slet img
@@ -211,5 +267,49 @@ public partial class ADMIN_Brugere : System.Web.UI.Page
             File.Delete(Server.MapPath("../Thumbs/" + FilNavn));
         }
     }
-    #endregion 
+    #endregion  
+    
+    //---------------------------------------Søgning
+    #region Search + datasource switching
+    protected void LinkButtonSearch_Click(object sender, EventArgs e)
+    {
+        GridViewBrugere.DataSourceID = null;
+        GridViewBrugere.DataSource = SqlDataSourceSearch;
+        GridViewBrugere.DataBind();
+        LinkButtonCancelSearch.Visible = true;
+    }
+    protected void LinkButtonCancelSearch_Click(object sender, EventArgs e)
+    {
+        GridViewBrugere.DataSourceID = null;
+        GridViewBrugere.DataSource = SqlDataSourceBrugere;
+        GridViewBrugere.DataBind();
+        TextBoxSearch.Text = "";
+        LinkButtonCancelSearch.Visible = false;
+    }
+    #endregion
+
+    //---------------------------------------Validering
+    #region Validering
+    protected void FormViewBrugerDetaljer_ItemInserting(object sender, FormViewInsertEventArgs e)
+    {
+        FormView Form = (FormView)sender as FormView;
+        Validate(Form, "Insert", e);
+
+    }
+    protected void FormViewBrugerDetaljer_ItemUpdating(object sender, FormViewUpdateEventArgs e)
+    {
+        FormView Form = (FormView)sender as FormView;
+        Validate(Form, "Update", e);
+    }
+
+    protected void Validate(FormView Form, string Action, dynamic e)
+    {
+        //Valider unikt navn og at det er udfyldt
+        Validator.ValidateUniqeness(Form, "TextBox" + Action + "BrugerNavn", "Brugere", "Navn", "Id", e);
+        //Valider at password er udfyldt
+        Validator.ValidateEmpty("TextBox" + Action + "BrugerPassword", e, Form);
+        //Valider at email er udfyldt og er en gyldig email
+        Validator.ValidatePattern("TextBox" + Action + "BrugerEmail", e, Form, @"^(?("")("".+?""@)|(([0-9a-zA-Z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-zA-Z])@))(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,6}))$", "Indtast gyldig email");
+    }
+    #endregion
 }
