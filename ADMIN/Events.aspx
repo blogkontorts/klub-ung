@@ -1,5 +1,8 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/ADMIN/AdminMasterPage.master" AutoEventWireup="true" CodeFile="Events.aspx.cs" Inherits="ADMIN_Events" %>
 
+<%@ Register Src="~/WUC/TimeList.ascx" TagPrefix="uc1" TagName="TimeList" %>
+
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
@@ -120,12 +123,12 @@
                     <tr>
                         <td>Fra:</td>
                         <td>
-                            <asp:Label ID="LabelEventStartDato" runat="server" Text='<%#Bind("StartDato", "{0:dd MMMM, yyyy H:mm}") %>'></asp:Label></td>
+                            <asp:Label ID="LabelEventStartDato" runat="server" Text='<%#Eval("StartDato", "{0:dd MMMM, yyyy}")+" - "+Eval("StartTid")%>'></asp:Label></td>
                     </tr>
                     <tr>
                         <td>Til:</td>
                         <td>
-                            <asp:Label ID="LabelEventSlutDato" runat="server" Text='<%#Bind("SlutDato", "{0:dd MMMM, yyyy H:mm}") %>'></asp:Label></td>
+                            <asp:Label ID="LabelEventSlutDato" runat="server" Text='<%#Eval("SlutDato", "{0:dd MMMM, yyyy}")+" - "+ Eval("SlutTid") %>'></asp:Label></td>
                     </tr>
                     <tr>
                         <td>Kategori:</td>
@@ -223,6 +226,12 @@
                                 OtherMonthDayStyle-BackColor="#cccccc" 
                                 TodayDayStyle-BackColor="#5cb85c"
                                 OnDayRender="CalendarInsertEventFra_DayRender"></asp:Calendar>
+                            <asp:Label ID="CalendarInsertEventFraMsg" runat="server" Text=""></asp:Label>
+                        </td>
+                        <td>
+                            <asp:Label ID="LabelInsertEventStartTid" runat="server" Text="Tid:"></asp:Label>
+                            <asp:TextBox ID="TextBoxInsertEventStartTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("StartTid") %>'></asp:TextBox>
+                            <asp:Label ID="TextBoxInsertEventStartTidMsg" runat="server" Text=""></asp:Label>
                         </td>
                     </tr>
                     <tr>
@@ -243,6 +252,12 @@
                                 OtherMonthDayStyle-BackColor="#cccccc" 
                                 TodayDayStyle-BackColor="#5cb85c"
                                 OnDayRender="CalendarInsertEventTil_DayRender"></asp:Calendar>
+                            <asp:Label ID="CalendarInsertEventTilMsg" runat="server" Text=""></asp:Label>
+                        </td>
+                        <td>
+                            <asp:Label ID="LabelInsertEventSlutTid" runat="server" Text="Tid:"></asp:Label>
+                            <asp:TextBox ID="TextBoxInsertEventSlutTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("SlutTid") %>'></asp:TextBox>
+                            <asp:Label ID="TextBoxInsertEventSlutTidMsg" runat="server" Text=""></asp:Label>
                         </td>
                     </tr>
                     <tr>
@@ -337,6 +352,12 @@
                                 TodayDayStyle-BackColor="#5cb85c"
                                 OnDayRender="CalendarUpdateEventFra_DayRender"></asp:Calendar>
                             <asp:Label ID="LabelUpdateEventFra" runat="server" Text='<%#"Nuværende: " + Eval("StartDato", "{0:d}") %>'></asp:Label>
+                            <asp:Label ID="CalendarUpdateEventFraMsg" runat="server" Text=""></asp:Label>
+                        </td>
+                        <td>
+                            <asp:Label ID="LabelUpdateEventStartTid" runat="server" Text="Tid:"></asp:Label>
+                            <asp:TextBox ID="TextBoxUpdateEventStartTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("StartTid") %>'></asp:TextBox>
+                            <asp:Label ID="TextBoxUpdateEventStartTidMsg" runat="server" Text=""></asp:Label>
                         </td>
                     </tr>
                     <tr>
@@ -358,6 +379,12 @@
                                 TodayDayStyle-BackColor="#5cb85c"
                                 OnDayRender="CalendarUpdateEventTil_DayRender"></asp:Calendar>
                             <asp:Label ID="LabelUpdateEventTil" runat="server" Text='<%#"Nuværende: " + Eval("SlutDato", "{0:d}") %>'></asp:Label>
+                            <asp:Label ID="CalendarUpdateEventTilMsg" runat="server" Text=""></asp:Label>
+                        </td>
+                        <td>
+                            <asp:Label ID="LabelUpdateEventSlutTid" runat="server" Text="Tid:"></asp:Label>
+                            <asp:TextBox ID="TextBoxUpdateEventSlutTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("SlutTid") %>'></asp:TextBox>
+                            <asp:Label ID="TextBoxUpdateEventSlutTidMsg" runat="server" Text=""></asp:Label>
                         </td>
                     </tr>
                     <tr>
@@ -522,12 +549,12 @@
                     <tr>
                         <td>Fra:</td>
                         <td>
-                            <asp:Label ID="LabelEventStartDato" runat="server" Text='<%#Bind("StartDato", "{0:dd MMMM, yyyy H:mm}") %>'></asp:Label></td>
+                            <asp:Label ID="LabelEventStartDato" runat="server" Text='<%#Eval("StartDato", "{0:dd MMMM, yyyy}")+" - "+Eval("StartTid")%>'></asp:Label></td>
                     </tr>
                     <tr>
                         <td>Til:</td>
                         <td>
-                            <asp:Label ID="LabelEventSlutDato" runat="server" Text='<%#Bind("SlutDato", "{0:dd MMMM, yyyy H:mm}") %>'></asp:Label></td>
+                            <asp:Label ID="LabelEventSlutDato" runat="server" Text='<%#Eval("SlutDato", "{0:dd MMMM, yyyy}")+" - "+ Eval("SlutTid") %>'></asp:Label></td>
                     </tr>
                     <tr>
                         <td>Kategori:</td>
@@ -613,6 +640,12 @@
                                 OtherMonthDayStyle-BackColor="#cccccc" 
                                 TodayDayStyle-BackColor="#5cb85c"
                                 OnDayRender="CalendarInsertEgenEventFra_DayRender"></asp:Calendar>
+                            <asp:Label ID="CalendarInsertEventFraMsg" runat="server" Text=""></asp:Label>
+                        </td>
+                        <td>
+                            <asp:Label ID="LabelInsertEventStartTid" runat="server" Text="Tid:"></asp:Label>
+                            <asp:TextBox ID="TextBoxInsertEventStartTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("StartTid") %>'></asp:TextBox>
+                            <asp:Label ID="TextBoxInsertEventStartTidMsg" runat="server" Text=""></asp:Label>
                         </td>
                     </tr>
                     <tr>
@@ -633,6 +666,12 @@
                                 OtherMonthDayStyle-BackColor="#cccccc" 
                                 TodayDayStyle-BackColor="#5cb85c"
                                 OnDayRender="CalendarInsertEgenEventTil_DayRender"></asp:Calendar>
+                            <asp:Label ID="CalendarInsertEventTilMsg" runat="server" Text=""></asp:Label>
+                        </td>
+                        <td>
+                            <asp:Label ID="LabelInsertEventSlutTid" runat="server" Text="Tid:"></asp:Label>
+                            <asp:TextBox ID="TextBoxInsertEventSlutTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("SlutTid") %>'></asp:TextBox>
+                            <asp:Label ID="TextBoxInsertEventSlutTidMsg" runat="server" Text=""></asp:Label>
                         </td>
                     </tr>
                     <tr>
@@ -666,7 +705,7 @@
                 </div>
             </InsertItemTemplate>
             <EditItemTemplate>
-                <h3>Rediger bruger</h3>
+                <h3>Rediger event</h3>
                 <table class="table table-hover">
                     <tr>
                         <td>Navn:</td>
@@ -721,6 +760,12 @@
                                 TodayDayStyle-BackColor="#5cb85c"
                                 OnDayRender="CalendarUpdateEgenEventFra_DayRender"></asp:Calendar>
                             <asp:Label ID="LabelUpdateEventFra" runat="server" Text='<%#"Nuværende: " + Eval("StartDato", "{0:d}") %>'></asp:Label>
+                            <asp:Label ID="CalendarUpdateEventFraMsg" runat="server" Text=""></asp:Label>
+                        </td>
+                        <td>
+                            <asp:Label ID="LabelUpdateEventStartTid" runat="server" Text="Tid:"></asp:Label>
+                            <asp:TextBox ID="TextBoxUpdateEventStartTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("StartTid") %>'></asp:TextBox>
+                            <asp:Label ID="TextBoxUpdateEventStartTidMsg" runat="server" Text=""></asp:Label>
                         </td>
                     </tr>
                     <tr>
@@ -742,6 +787,12 @@
                                 TodayDayStyle-BackColor="#5cb85c"
                                 OnDayRender="CalendarUpdateEgenEventTil_DayRender"></asp:Calendar>
                             <asp:Label ID="LabelUpdateEventTil" runat="server" Text='<%#"Nuværende: " + Eval("SlutDato", "{0:d}") %>'></asp:Label>
+                            <asp:Label ID="CalendarUpdateEventTilMsg" runat="server" Text=""></asp:Label>
+                        </td>
+                        <td>
+                            <asp:Label ID="LabelUpdateEventSlutTid" runat="server" Text="Tid:"></asp:Label>
+                            <asp:TextBox ID="TextBoxUpdateEventSlutTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("StartTid") %>'></asp:TextBox>
+                            <asp:Label ID="TextBoxUpdateEventSlutTidMsg" runat="server" Text=""></asp:Label>
                         </td>
                     </tr>
                     <tr>
@@ -828,6 +879,8 @@
         SelectCommand="SELECT Events.Id,
                               Events.StartDato,
                               Events.SlutDato,
+                              Events.StartTid,
+                              Events.SlutTid,
                               Brugere.Navn AS Bruger,
                               Brugere.Id AS BrugerId,
                               Events.Navn AS Navn,
@@ -843,8 +896,8 @@
                        FROM Events JOIN Brugere ON FkBrugerId = Brugere.Id
                                    JOIN Kategori ON FkKategoriId = Kategori.Id
                        WHERE Events.Id = @Id"
-        InsertCommand="INSERT INTO Events(Navn, Adresse, Beskrivelse, StartDato, SlutDato, Img, FkBrugerId, Godkendt, FkKategoriId, Bynavn, Postnr) 
-                             VALUES(@Navn, @Adresse, @Beskrivelse, @StartDato, @SlutDato, @Img, @BrugerId, @Bypass, @KategoriId, @Bynavn, @Postnr)"
+        InsertCommand="INSERT INTO Events(Navn, Adresse, Beskrivelse, StartDato, SlutDato, Img, FkBrugerId, Godkendt, FkKategoriId, Bynavn, Postnr, StartTid, SlutTid) 
+                             VALUES(@Navn, @Adresse, @Beskrivelse, @StartDato, @SlutDato, @Img, @BrugerId, @Bypass, @KategoriId, @Bynavn, @Postnr, @StartTid, @SlutTid)"
         UpdateCommand="UPDATE Events SET Navn = @Navn,
                                          Adresse = @Adresse,
                                          Beskrivelse = @Beskrivelse,
@@ -855,7 +908,9 @@
                                          Godkendt = @Bypass,
                                          FkKategoriId = @KategoriId,
                                          Bynavn = @Bynavn,
-                                         Postnr = @Postnr
+                                         Postnr = @Postnr,
+                                         StartTid = @StartTid,
+                                         SlutTid = @SlutTid
                        WHERE Events.Id = @Id"
         DeleteCommand="UPDATE Events SET Slettet = 1
                        WHERE Events.Id = @Id"
@@ -917,6 +972,8 @@
         SelectCommand="SELECT Events.Id,
                               Events.StartDato,
                               Events.SlutDato,
+                              Events.StartTid,
+                              Events.SlutTid,
                               Brugere.Navn AS Bruger,
                               Brugere.Id AS BrugerId,
                               Events.Navn AS Navn,
@@ -932,8 +989,8 @@
                        FROM Events JOIN Brugere ON FkBrugerId = Brugere.Id
                                    JOIN Kategori ON FkKategoriId = Kategori.Id
                        WHERE Events.Id = @Id"
-        InsertCommand="INSERT INTO Events(Navn, Adresse, Beskrivelse, StartDato, SlutDato, Img, FkBrugerId, Godkendt, FkKategoriId, Bynavn, Postnr) 
-                             VALUES(@Navn, @Adresse, @Beskrivelse, @StartDato, @SlutDato, @Img, @BrugerId, @Bypass, @KategoriId, @Bynavn, @Postnr)"
+        InsertCommand="INSERT INTO Events(Navn, Adresse, Beskrivelse, StartDato, SlutDato, Img, FkBrugerId, Godkendt, FkKategoriId, Bynavn, Postnr, StartTid, SlutTid) 
+                             VALUES(@Navn, @Adresse, @Beskrivelse, @StartDato, @SlutDato, @Img, @BrugerId, @Bypass, @KategoriId, @Bynavn, @Postnr, @StartTid, @SlutTid)"
         UpdateCommand="UPDATE Events SET Navn = @Navn,
                                          Adresse = @Adresse,
                                          Beskrivelse = @Beskrivelse,
@@ -944,7 +1001,9 @@
                                          FkBrugerId = @BrugerId,
                                          FkKategoriId = @KategoriId,
                                          Bynavn = @Bynavn,
-                                         Postnr = @Postnr
+                                         Postnr = @Postnr,
+                                         StartTid = @StartTid,
+                                         SlutTid = @SlutTid
                        WHERE Events.Id = @Id"
         DeleteCommand="UPDATE Events SET Slettet = 1
                        WHERE Events.Id = @Id"

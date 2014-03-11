@@ -131,13 +131,6 @@ public partial class ADMIN_Events : System.Web.UI.Page
             // Opdater SqlDataSourcens parametre så det Nye filnavn skrives i databasen
             e.Command.Parameters["@Img"].Value = NytFilnavn;
         }
-
-        //Hjælper til at sikre ordentligt input til datoer
-        TextBox StartDato = FormViewEventDetaljer.FindControl("TextBoxFra") as TextBox;
-        e.Command.Parameters["@StartDato"].Value = DateTime.Parse(StartDato.Text);
-
-        TextBox SlutDato = FormViewEventDetaljer.FindControl("TextBoxTil") as TextBox;
-        e.Command.Parameters["@SlutDato"].Value = DateTime.Parse(SlutDato.Text);
     }
 
     protected void SqlDataSourceEgenEvent_Inserting(object sender, SqlDataSourceCommandEventArgs e)
@@ -421,12 +414,42 @@ public partial class ADMIN_Events : System.Web.UI.Page
     {
         FormView Form = (FormView)sender as FormView;
         Validate(Form, "Insert", e);
+        Calendar FraKalender = Form.FindControl("CalendarInsertEventFra") as Calendar;
+        Calendar TilKalender = Form.FindControl("CalendarInsertEventTil") as Calendar;
+        if (FraKalender.SelectedDate.Date == DateTime.MinValue.Date)
+        {
+            e.Cancel = true;
+            Label FraMsg = Form.FindControl("CalendarInsertEventFraMsg") as Label;
+            FraMsg.Text = "Vælg en startdato";
+        }
+
+        if (TilKalender.SelectedDate.Date == DateTime.MinValue.Date)
+        {
+            e.Cancel = true;
+            Label TilMsg = Form.FindControl("CalendarInsertEventTilMsg") as Label;
+            TilMsg.Text = "Vælg en slutdato";
+        }
         
     }
     protected void FormViewEventDetaljer_ItemUpdating(object sender, FormViewUpdateEventArgs e)
     {
         FormView Form = (FormView)sender as FormView;
         Validate(Form, "Update", e);
+        Calendar FraKalender = Form.FindControl("CalendarUpdateEventFra") as Calendar;
+        Calendar TilKalender = Form.FindControl("CalenderUpdateEventTil") as Calendar;
+        if (FraKalender.SelectedDate.Date == DateTime.MinValue.Date)
+        {
+            e.Cancel = true;
+            Label FraMsg = Form.FindControl("CalendarUpdateEventFraMsg") as Label;
+            FraMsg.Text = "Vælg en startdato";
+        }
+
+        if (TilKalender.SelectedDate.Date == DateTime.MinValue.Date)
+        {
+            e.Cancel = true;
+            Label TilMsg = Form.FindControl("CalendarUpdateEventTilMsg") as Label;
+            TilMsg.Text = "Vælg en slutdato";
+        }
     }
 
     protected void Validate(FormView Form, string Action, dynamic e)
@@ -439,6 +462,9 @@ public partial class ADMIN_Events : System.Web.UI.Page
         Validator.ValidateEmpty("TextBox"+Action+"EventBy", e, Form);
         //Valider at postnr er udfyldt og er et tal
         Validator.ValidatePattern("TextBox"+Action+"EventPostnr", e, Form, @"^\d{4}$", "Udfyld et postnummer");
+        //Valider at tider er udfyldt korrekt
+        Validator.ValidatePattern("TextBox"+Action+"EventStartTid", e, Form, @"^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$", "Udfyld et tidspunkt");
+        Validator.ValidatePattern("TextBox"+Action+"EventSlutTid", e, Form, @"^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$", "Udfyld et tidspunkt");
         //Valider at beskrivelsen er udfyldt
         Validator.ValidateEmpty("TextBox"+Action+"EventBeskrivelse", e, Form);
     }
