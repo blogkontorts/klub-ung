@@ -170,12 +170,12 @@
                 var bounds = map.getBounds();
                 searchBox.setBounds(bounds);
 
-                document.getElementById('submit').disabled = false;
+                document.getElementById('brugDennePosition').disabled = false;
             });
         }
 
         function checkChanged(tfValue) {
-            document.getElementById('submit').disabled = true;
+            document.getElementById('brugDennePosition').disabled = true;
         }
 
 
@@ -193,7 +193,8 @@
     <input id="long" type="text" style="display:none"/>
 
     <input id="pac-input" class="controls" type="text" placeholder="Search Box" onkeypress="checkChanged( this );"/>
-    <button id ="submit" type ="submit" disabled="disabled">submit</button>
+    <button id ="submit" type ="submit" disabled="">submit</button>
+    <script>document.getElementById('brugDennePosition').disabled = true;</script>
     <div id="map-canvas"></div>
 </asp:Content>
 
