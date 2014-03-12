@@ -9,10 +9,6 @@ public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        if(Session["lat"] != null && Session["long"] != null && Session["address"] != null) {
-            test.Text = Session["lat"].ToString();
-            test.Text += Session["long"].ToString(); 
-            test.Text += Session["address"].ToString();
-        }
+
     }
 }

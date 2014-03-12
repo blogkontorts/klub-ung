@@ -8,6 +8,10 @@
             margin: 0px;
             padding: 0px;
         }
+    /*<button id ="submitPosition" class="controls submitbutton" type ="submit">submit</button>*/
+        button[type="submit"]:enabled {
+            background-color:#5cb85c;
+        }
 
         .controls {
             margin-top: 16px;
@@ -196,7 +200,7 @@
     <input id="long" name="long" type="hidden"/>
     <input id="address" name="address" type="hidden"/>
     <input id="pac-input" class="controls" type="text" placeholder="Search Box" onkeypress="checkChanged( this );"/>
-    <button id ="submitPosition" class="controls" type ="submit">submit</button>
+    <button id ="submitPosition" class="controls submitbutton" type ="submit">submit</button>
     <div id="map-canvas"></div>
 </asp:Content>
 
