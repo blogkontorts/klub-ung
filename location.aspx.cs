@@ -8,22 +8,8 @@ using System.Data;
 using System.Configuration;
 using System.Data.SqlClient;
 
-public partial class location : System.Web.UI.Page
-{
-    protected void Page_Load(object sender, EventArgs e)
-    {
-            //System.Web.UI.HtmlControls.HtmlInputControl lat = this.FindControl("lat") as System.Web.UI.HtmlControls.HtmlInputControl;
-            string lat = Request.Form["lat"];
-            string lon = Request.Form["long"];
-            string address = Request.Form["address"];
-            Session["lat"] = lat;
-            Session["long"] = lon;
-            Session["address"] = address;
-
-            if(lat != null) {
-                Response.Redirect("default.aspx");
-            }
-
+public partial class location:System.Web.UI.Page {
+    protected void Page_Load(object sender, EventArgs e) {
     }
 
 

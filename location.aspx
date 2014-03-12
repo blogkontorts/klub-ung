@@ -30,12 +30,12 @@
             text-overflow: ellipsis;
         }
 
-            #pac-input:focus {
-                border-color: #4d90fe;
-                margin-left: -1px;
-                padding-left: 14px; /* Regular padding-left + 1. */
-                width: 401px;
-            }
+        #pac-input:focus {
+            border-color: #4d90fe;    
+            margin-left: -1px;
+            padding-left: 14px; /* Regular padding-left + 1. */
+            width: 401px;
+        }
 
         .pac-container {
             font-family: Roboto;
@@ -66,6 +66,7 @@
         var infowindow;
         var defaultlatlog;
         var input;
+        var submitButton;
         var searchBox;
         var places;
         var defaultBounds;
@@ -75,7 +76,7 @@
             showEvents();
             makeScarchField();
             addListeners();
-            document.getElementById('brugDennePosition').disabled = true;
+            document.getElementById('submitPosition').disabled = true;
         }
 
 
@@ -120,6 +121,9 @@
 
             searchBox = new google.maps.places.SearchBox(
               /** @type {HTMLInputElement} */(input));
+            submitButton = /** @type {HTMLInputElement} */(
+                document.getElementById('submitPosition')); submitButton
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(submitPosition);
         }
 
         function Search() {
@@ -159,16 +163,13 @@
             document.getElementById('address').value = address[0];
             document.getElementById('lat').value = markers[0].getPosition().lat();
             document.getElementById('long').value = markers[0].getPosition().lng();
-            window.alert(document.getElementById('lat').value);
-            window.alert(document.getElementById('long').value);
-            window.alert(document.getElementById('address').value);
         };
         // [END region_getplaces]
 
         function addListeners() {
             google.maps.event.addListener(searchBox, 'places_changed', function() {
                 Search();
-                document.getElementById('brugDennePosition').disabled = false;
+                document.getElementById('submitPosition').disabled = false;
             });
 
             // Bias the SearchBox results towards places that are within the bounds of the
@@ -180,7 +181,7 @@
         }
 
         function checkChanged(tfValue) {
-            document.getElementById('brugDennePosition').disabled = true;
+            document.getElementById('submitPosition').disabled = true;
         }
 
         google.maps.event.addDomListener(window, 'load', InitializeMap);
@@ -195,7 +196,7 @@
     <input id="long" name="long" type="hidden"/>
     <input id="address" name="address" type="hidden"/>
     <input id="pac-input" class="controls" type="text" placeholder="Search Box" onkeypress="checkChanged( this );"/>
-    <button id ="brugDennePosition" type ="submit">submit</button>
+    <button id ="submitPosition" class="controls" type ="submit">submit</button>
     <div id="map-canvas"></div>
 </asp:Content>
 
