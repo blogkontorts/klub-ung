@@ -27,7 +27,7 @@
         #pac-input {
             background-color: #fff;
             padding: 0 11px 0 13px;
-            width: 400px;
+            width: 50%;
             font-family: Roboto;
             font-size: 15px;
             font-weight: 300;
@@ -38,7 +38,7 @@
             border-color: #4d90fe;    
             margin-left: -1px;
             padding-left: 14px; /* Regular padding-left + 1. */
-            width: 401px;
+            width: 50%;
         }
 
         .pac-container {
@@ -98,7 +98,7 @@
         function showEvents() {
             for (var i = 0; i < datatable.length; i++) {
                 var datarow = datatable[i];
-                var Latlong = new google.maps.LatLng(datarow['lat'], datarow['long']);
+                var Latlong = new google.maps.LatLng(datarow['Lat'], datarow['Long']);
                 marker = new google.maps.Marker({
                     map: map,
                     position: Latlong,
@@ -167,6 +167,9 @@
             document.getElementById('address').value = address[0];
             document.getElementById('lat').value = markers[0].getPosition().lat();
             document.getElementById('long').value = markers[0].getPosition().lng();
+            window.alert(document.getElementById('address').value);
+            window.alert(document.getElementById('lat').value);
+            window.alert(document.getElementById('long').value);
         };
         // [END region_getplaces]
 
@@ -174,6 +177,7 @@
             google.maps.event.addListener(searchBox, 'places_changed', function() {
                 Search();
                 document.getElementById('submitPosition').disabled = false;
+                document.getElementById('submitPosition').value = "true";
             });
 
             // Bias the SearchBox results towards places that are within the bounds of the
@@ -200,7 +204,7 @@
     <input id="long" name="long" type="hidden"/>
     <input id="address" name="address" type="hidden"/>
     <input id="pac-input" class="controls" type="text" placeholder="Search Box" onkeypress="checkChanged( this );"/>
-    <button id ="submitPosition" class="controls submitbutton" type ="submit">submit</button>
+    <button id ="submitPosition" name="submitPosition" class="controls submitbutton" type ="submit">submit</button>
     <div id="map-canvas"></div>
 </asp:Content>
 

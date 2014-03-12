@@ -19,6 +19,11 @@ public partial class ADMIN_Events : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        //if (Session["lat"] != null)
+        //{
+        //    LabelTest.Text = Session["lat"].ToString() + Session["long"].ToString() + Session["address"].ToString();
+        //}
+        PanelSearch.DefaultButton = "LinkButtonSearch";
         try
         {
             if (GetRights().Contains("Bypass"))
@@ -320,6 +325,21 @@ public partial class ADMIN_Events : System.Web.UI.Page
             // Opdater SqlDataSourcens parametre så det gamle filnavn skrives i databasen
             e.Command.Parameters["@Img"].Value = FilNavn;
         }
+
+        if (Session["lat"] != null && Session["long"] != null && Session["address"] != null)
+        {
+            //opret et SqlCommand object
+            SqlCommand cmd = new SqlCommand("UPDATE Events SET Adresse = @Adresse, Lat = @Lat, Long = @Long WHERE Id = @Id", conn);
+            cmd.Parameters.Add("@Lat", SqlDbType.NVarChar).Value = Session["lat"].ToString();
+            cmd.Parameters.Add("@Long", SqlDbType.NVarChar).Value = Session["long"].ToString();
+            cmd.Parameters.Add("@Adresse", SqlDbType.NVarChar).Value = Session["address"].ToString();
+            cmd.Parameters.Add("@Id", SqlDbType.NVarChar).Value = GridViewEvents.SelectedValue;
+
+            // åben forbindelsen til databasen
+            conn.Open();
+            cmd.ExecuteNonQuery();
+            conn.Close();
+        }
     }
 
     protected void SqlDataSourceEgenEvent_Updating(object sender, SqlDataSourceCommandEventArgs e)
@@ -346,6 +366,22 @@ public partial class ADMIN_Events : System.Web.UI.Page
             string FilNavn = HentFilNavn(Id);
             // Opdater SqlDataSourcens parametre så det gamle filnavn skrives i databasen
             e.Command.Parameters["@Img"].Value = FilNavn;
+        }
+
+        if (Session["lat"] != null && Session["long"] != null && Session["address"] != null)
+        {
+            //opret et SqlCommand object
+            SqlCommand cmd = new SqlCommand("UPDATE Events SET Adresse = @Adresse, Lat = @Lat, Long = @Long WHERE Id = @Id", conn);
+            cmd.Parameters.Add("@Lat", SqlDbType.NVarChar).Value = Session["lat"].ToString();
+            cmd.Parameters.Add("@Long", SqlDbType.NVarChar).Value = Session["long"].ToString();
+            cmd.Parameters.Add("@Adresse", SqlDbType.NVarChar).Value = Session["address"].ToString();
+            cmd.Parameters.Add("@Id", SqlDbType.NVarChar).Value = GridViewEgneEvents.SelectedValue;
+
+
+            // åben forbindelsen til databasen
+            conn.Open();
+            cmd.ExecuteNonQuery();
+            conn.Close();
         }
     }
 
@@ -436,7 +472,7 @@ public partial class ADMIN_Events : System.Web.UI.Page
         FormView Form = (FormView)sender as FormView;
         Validate(Form, "Update", e);
         Calendar FraKalender = Form.FindControl("CalendarUpdateEventFra") as Calendar;
-        Calendar TilKalender = Form.FindControl("CalenderUpdateEventTil") as Calendar;
+        Calendar TilKalender = Form.FindControl("CalendarUpdateEventTil") as Calendar;
         if (FraKalender.SelectedDate.Date == DateTime.MinValue.Date)
         {
             e.Cancel = true;
@@ -454,19 +490,22 @@ public partial class ADMIN_Events : System.Web.UI.Page
 
     protected void Validate(FormView Form, string Action, dynamic e)
     {
+        
         //Valider unikt navn og at det er udfyldt
-        Validator.ValidateUniqeness(Form, "TextBox"+Action+"EventNavn", "Events", "Navn", "Id", e);
-        //Valider at adresse er udfyldt
-        Validator.ValidateEmpty("TextBox"+Action+"EventAdresse", e, Form);
-        //Valider at bynavn er udfyldt
-        Validator.ValidateEmpty("TextBox"+Action+"EventBy", e, Form);
-        //Valider at postnr er udfyldt og er et tal
-        Validator.ValidatePattern("TextBox"+Action+"EventPostnr", e, Form, @"^\d{4}$", "Udfyld et postnummer");
+        Validator.ValidateUniqeness(Form, "TextBox"+Action+"EventNavn", "Events", "Navn", "Id", e, GetId());
         //Valider at tider er udfyldt korrekt
-        Validator.ValidatePattern("TextBox"+Action+"EventStartTid", e, Form, @"^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$", "Udfyld et tidspunkt");
-        Validator.ValidatePattern("TextBox"+Action+"EventSlutTid", e, Form, @"^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$", "Udfyld et tidspunkt");
+        Validator.ValidatePattern("TextBox" + Action + "EventStartTid", e, Form, @"^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$", "Udfyld et tidspunkt");
+        Validator.ValidatePattern("TextBox" + Action + "EventSlutTid", e, Form, @"^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$", "Udfyld et tidspunkt");
         //Valider at beskrivelsen er udfyldt
         Validator.ValidateEmpty("TextBox"+Action+"EventBeskrivelse", e, Form);
+    }
+
+    protected int GetId()
+    {
+        if (GetRights().Contains("AdminEvents"))
+            return (int)GridViewEvents.SelectedValue;
+        else
+            return (int)GridViewEgneEvents.SelectedValue;
     }
     #endregion
 
@@ -583,4 +622,34 @@ public partial class ADMIN_Events : System.Web.UI.Page
         CheckToDate(FormViewEgenEventDetaljer, "Update", e);
     }
     #endregion
+
+
+    protected void SqlDataSourceEventDetaljer_Inserted(object sender, SqlDataSourceStatusEventArgs e)
+    {      
+        Session["lat"] = null;
+        Session["long"] = null;
+        Session["address"] = null;
+        OnSqlChanged(sender, e);
+    }
+    protected void SqlDataSourceEventDetaljer_Updated(object sender, SqlDataSourceStatusEventArgs e)
+    {       
+        Session["lat"] = null;
+        Session["long"] = null;
+        Session["address"] = null;
+        OnSqlChanged(sender, e);
+    }
+    protected void SqlDataSourceEgenEvent_Inserted(object sender, SqlDataSourceStatusEventArgs e)
+    {
+        Session["lat"] = null;
+        Session["long"] = null;
+        Session["address"] = null;
+        OnSqlChanged(sender, e);
+    }
+    protected void SqlDataSourceEgenEvent_Updated(object sender, SqlDataSourceStatusEventArgs e)
+    {
+        Session["lat"] = null;
+        Session["long"] = null;
+        Session["address"] = null;
+        OnSqlChanged(sender, e);
+    }
 }

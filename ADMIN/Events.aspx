@@ -1,9 +1,9 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/ADMIN/AdminMasterPage.master" AutoEventWireup="true" CodeFile="Events.aspx.cs" Inherits="ADMIN_Events" %>
+﻿<%@ Page Title="" Language="C#" MaintainScrollPositionOnPostback="true" MasterPageFile="~/ADMIN/AdminMasterPage.master" AutoEventWireup="true" CodeFile="Events.aspx.cs" Inherits="ADMIN_Events" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-    <asp:Label ID="LabelTest" runat="server" Text=""></asp:Label>
+<%--    <asp:Label ID="LabelTest" runat="server" Text=""></asp:Label>--%>
     <!--Admin View Panel-->
     <asp:Panel ID="PanelAdminView" runat="server" Visible="false">
         <div class="col-sm-12">
@@ -11,7 +11,7 @@
         </div>
         <div class="col-sm-6">
             <h3>Events</h3>
-            <div class="input-group input-group-lg Search">
+            <asp:Panel ID="PanelSearch" CssClass="input-group input-group-lg Search" runat="server">
                 <span class="input-group-btn">
                     <asp:LinkButton ID="LinkButtonSearch" CssClass="btn btn-info" runat="server" OnClick="LinkButtonSearch_Click"><span class="glyphicon glyphicon-search"></span></asp:LinkButton>
                 </span>
@@ -19,7 +19,7 @@
                 <span class="input-group-btn">
                     <asp:LinkButton ID="LinkButtonCancelSearch" Visible="false" CssClass="btn btn-danger" runat="server" OnClick="LinkButtonCancelSearch_Click"><span class="glyphicon glyphicon-remove"></span></asp:LinkButton>
                 </span>
-            </div>
+            </asp:Panel>
             <asp:GridView
                 ID="GridViewEvents"
                 runat="server"
@@ -115,7 +115,7 @@
                     <tr>
                         <td>Adresse:</td>
                         <td>
-                            <asp:Label ID="LabelEventAdresse" runat="server" Text='<%#Bind("Sted") %>'></asp:Label></td>
+                            <asp:Label ID="LabelEventAdresse" runat="server" Text='<%#Bind("Adresse") %>'></asp:Label></td>
                     </tr>
                     <tr>
                         <td>Fra:</td>
@@ -198,7 +198,8 @@
                             <asp:ImageButton ID="ImageButtonPrevMonthFra" runat="server" ImageUrl="~/Images/arrowcutleft.png" OnClick="ImageButtonPrevMonth_Click" />
                             <asp:ImageButton ID="ImageButtonNextMonthFra" runat="server" ImageUrl="~/Images/arrowcut.png" OnClick="ImageButtonNextMonth_Click" />
                             <asp:ImageButton ID="ImageButtonNextYearFra" runat="server" ImageUrl="~/Images/darrowcut.png" OnClick="ImageButtonNextYear_Click" />
-                            <asp:Calendar 
+                            <asp:Calendar
+                                width="100%" 
                                 ID="CalendarInsertEventFra" 
                                 runat="server" 
                                 SelectedDate='<%#Bind("StartDato") %>' 
@@ -224,6 +225,7 @@
                             <asp:ImageButton ID="ImageButtonNextMonthTil" runat="server" ImageUrl="~/Images/arrowcut.png" OnClick="ImageButtonNextMonth_Click" />
                             <asp:ImageButton ID="ImageButtonNextYearTil" runat="server" ImageUrl="~/Images/darrowcut.png" OnClick="ImageButtonNextYear_Click" />
                             <asp:Calendar 
+                                width="100%"
                                 ID="CalendarInsertEventTil" 
                                 runat="server" 
                                 SelectedDate='<%#Bind("SlutDato") %>' 
@@ -272,7 +274,7 @@
                 </div>
             </InsertItemTemplate>
             <EditItemTemplate>
-                <h3>Rediger bruger</h3>
+                <h3>Rediger event</h3>
                 <table class="table table-hover">
                     <tr>
                         <td>Navn:</td>
@@ -296,7 +298,8 @@
                     <tr>
                         <td>Adresse:</td>
                         <td>
-                            <asp:Label ID="LabelMapDescription" runat="server" Text="Indtast adressen på din event og tryk på submit"></asp:Label>
+                            <asp:Label ID="LabelMapDescription" runat="server" Text="Indtast adressen på din event og tryk på submit"></asp:Label><br />
+                            <asp:Label ID="Label1" runat="server" Text='<%#"Nuværende: " + Eval("Adresse") %>'></asp:Label>
                             <embed src="../location.aspx" width="500" height="500" />
                         </td>
                     </tr>
@@ -308,6 +311,7 @@
                             <asp:ImageButton ID="ImageButtonUpdateNextMonthFra" runat="server" ImageUrl="~/Images/arrowcut.png" OnClick="ImageButtonUpdateNextMonth_Click" />
                             <asp:ImageButton ID="ImageButtonUpdateNextYearFra" runat="server" ImageUrl="~/Images/darrowcut.png" OnClick="ImageButtonUpdateNextYear_Click" />
                             <asp:Calendar 
+                                width="100%"
                                 ID="CalendarUpdateEventFra" 
                                 runat="server" 
                                 SelectedDate='<%#Bind("StartDato") %>'
@@ -320,7 +324,7 @@
                                 OnDayRender="CalendarUpdateEventFra_DayRender"></asp:Calendar>
                             <asp:Label ID="LabelUpdateEventFra" runat="server" Text='<%#"Nuværende: " + Eval("StartDato", "{0:d}") %>'></asp:Label>
                             <asp:Label ID="CalendarUpdateEventFraMsg" runat="server" Text=""></asp:Label>
-                        
+                            <br />
                             <asp:Label ID="LabelUpdateEventStartTid" runat="server" Text="Tid:"></asp:Label>
                             <asp:TextBox ID="TextBoxUpdateEventStartTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("StartTid") %>'></asp:TextBox>
                             <asp:Label ID="TextBoxUpdateEventStartTidMsg" runat="server" Text=""></asp:Label>
@@ -334,6 +338,7 @@
                             <asp:ImageButton ID="ImageButtonUpdateNextMonthTil" runat="server" ImageUrl="~/Images/arrowcut.png" OnClick="ImageButtonUpdateNextMonth_Click" />
                             <asp:ImageButton ID="ImageButtonUpdateNextYearTil" runat="server" ImageUrl="~/Images/darrowcut.png" OnClick="ImageButtonUpdateNextYear_Click" />
                             <asp:Calendar 
+                                width="100%"
                                 ID="CalendarUpdateEventTil" 
                                 runat="server" 
                                 SelectedDate='<%#Bind("SlutDato") %>'
@@ -346,7 +351,7 @@
                                 OnDayRender="CalendarUpdateEventTil_DayRender"></asp:Calendar>
                             <asp:Label ID="LabelUpdateEventTil" runat="server" Text='<%#"Nuværende: " + Eval("SlutDato", "{0:d}") %>'></asp:Label>
                             <asp:Label ID="CalendarUpdateEventTilMsg" runat="server" Text=""></asp:Label>
-                        
+                            <br />
                             <asp:Label ID="LabelUpdateEventSlutTid" runat="server" Text="Tid:"></asp:Label>
                             <asp:TextBox ID="TextBoxUpdateEventSlutTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("SlutTid") %>'></asp:TextBox>
                             <asp:Label ID="TextBoxUpdateEventSlutTidMsg" runat="server" Text=""></asp:Label>
@@ -509,7 +514,7 @@
                     <tr>
                         <td>Adresse:</td>
                         <td>
-                            <asp:Label ID="LabelEventAdresse" runat="server" Text='<%#Bind("Sted") %>'></asp:Label></td>
+                            <asp:Label ID="LabelEventAdresse" runat="server" Text='<%#Eval("Adresse") %>'></asp:Label></td>
                     </tr>
                     <tr>
                         <td>Fra:</td>
@@ -581,6 +586,7 @@
                             <asp:ImageButton ID="ImageButtonNextMonthFra" runat="server" ImageUrl="~/Images/arrowcut.png" OnClick="ImageButtonNextMonth_Click" />
                             <asp:ImageButton ID="ImageButtonNextYearFra" runat="server" ImageUrl="~/Images/darrowcut.png" OnClick="ImageButtonNextYear_Click" />
                             <asp:Calendar 
+                                width="100%"
                                 ID="CalendarInsertEventFra" 
                                 runat="server" 
                                 SelectedDate='<%#Bind("StartDato") %>' 
@@ -592,7 +598,7 @@
                                 TodayDayStyle-BackColor="#5cb85c"
                                 OnDayRender="CalendarInsertEgenEventFra_DayRender"></asp:Calendar>
                             <asp:Label ID="CalendarInsertEventFraMsg" runat="server" Text=""></asp:Label>
-                        
+                            <br />
                             <asp:Label ID="LabelInsertEventStartTid" runat="server" Text="Tid:"></asp:Label>
                             <asp:TextBox ID="TextBoxInsertEventStartTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("StartTid") %>'></asp:TextBox>
                             <asp:Label ID="TextBoxInsertEventStartTidMsg" runat="server" Text=""></asp:Label>
@@ -606,6 +612,7 @@
                             <asp:ImageButton ID="ImageButtonNextMonthTil" runat="server" ImageUrl="~/Images/arrowcut.png" OnClick="ImageButtonNextMonth_Click" />
                             <asp:ImageButton ID="ImageButtonNextYearTil" runat="server" ImageUrl="~/Images/darrowcut.png" OnClick="ImageButtonNextYear_Click" />
                             <asp:Calendar 
+                                width="100%"
                                 ID="CalendarInsertEventTil" 
                                 runat="server" 
                                 SelectedDate='<%#Bind("SlutDato") %>' 
@@ -617,7 +624,7 @@
                                 TodayDayStyle-BackColor="#5cb85c"
                                 OnDayRender="CalendarInsertEgenEventTil_DayRender"></asp:Calendar>
                             <asp:Label ID="CalendarInsertEventTilMsg" runat="server" Text=""></asp:Label>
-                        
+                            <br />
                             <asp:Label ID="LabelInsertEventSlutTid" runat="server" Text="Tid:"></asp:Label>
                             <asp:TextBox ID="TextBoxInsertEventSlutTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("SlutTid") %>'></asp:TextBox>
                             <asp:Label ID="TextBoxInsertEventSlutTidMsg" runat="server" Text=""></asp:Label>
@@ -672,7 +679,8 @@
                     <tr>
                         <td>Adresse:</td>
                         <td>
-                            <asp:Label ID="LabelMapDescription" runat="server" Text="Indtast adressen på din event og tryk på submit"></asp:Label>
+                            <asp:Label ID="LabelMapDescription" runat="server" Text="Indtast adressen på din event og tryk på submit"></asp:Label><br />
+                            <asp:Label ID="Label1" runat="server" Text='<%#"Nuværende: " + Eval("Adresse") %>'></asp:Label>
                             <embed src="../location.aspx" width="500" height="500" />
                         </td>
                     </tr>
@@ -684,6 +692,7 @@
                             <asp:ImageButton ID="ImageButtonUpdateNextMonthFra" runat="server" ImageUrl="~/Images/arrowcut.png" OnClick="ImageButtonUpdateNextMonth_Click" />
                             <asp:ImageButton ID="ImageButtonUpdateNextYearFra" runat="server" ImageUrl="~/Images/darrowcut.png" OnClick="ImageButtonUpdateNextYear_Click" />
                             <asp:Calendar 
+                                width="100%"
                                 ID="CalendarUpdateEventFra" 
                                 runat="server" 
                                 SelectedDate='<%#Bind("StartDato") %>'
@@ -696,7 +705,7 @@
                                 OnDayRender="CalendarUpdateEgenEventFra_DayRender"></asp:Calendar>
                             <asp:Label ID="LabelUpdateEventFra" runat="server" Text='<%#"Nuværende: " + Eval("StartDato", "{0:d}") %>'></asp:Label>
                             <asp:Label ID="CalendarUpdateEventFraMsg" runat="server" Text=""></asp:Label>
-                        
+                            <br />
                             <asp:Label ID="LabelUpdateEventStartTid" runat="server" Text="Tid:"></asp:Label>
                             <asp:TextBox ID="TextBoxUpdateEventStartTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("StartTid") %>'></asp:TextBox>
                             <asp:Label ID="TextBoxUpdateEventStartTidMsg" runat="server" Text=""></asp:Label>
@@ -710,6 +719,7 @@
                             <asp:ImageButton ID="ImageButtonUpdateNextMonthTil" runat="server" ImageUrl="~/Images/arrowcut.png" OnClick="ImageButtonUpdateNextMonth_Click" />
                             <asp:ImageButton ID="ImageButtonUpdateNextYearTil" runat="server" ImageUrl="~/Images/darrowcut.png" OnClick="ImageButtonUpdateNextYear_Click" />
                             <asp:Calendar 
+                                width="100%"
                                 ID="CalendarUpdateEventTil" 
                                 runat="server" 
                                 SelectedDate='<%#Bind("SlutDato") %>'
@@ -722,9 +732,9 @@
                                 OnDayRender="CalendarUpdateEgenEventTil_DayRender"></asp:Calendar>
                             <asp:Label ID="LabelUpdateEventTil" runat="server" Text='<%#"Nuværende: " + Eval("SlutDato", "{0:d}") %>'></asp:Label>
                             <asp:Label ID="CalendarUpdateEventTilMsg" runat="server" Text=""></asp:Label>
-                        
+                            <br />
                             <asp:Label ID="LabelUpdateEventSlutTid" runat="server" Text="Tid:"></asp:Label>
-                            <asp:TextBox ID="TextBoxUpdateEventSlutTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("StartTid") %>'></asp:TextBox>
+                            <asp:TextBox ID="TextBoxUpdateEventSlutTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("SlutTid") %>'></asp:TextBox>
                             <asp:Label ID="TextBoxUpdateEventSlutTidMsg" runat="server" Text=""></asp:Label>
                         </td>
                     </tr>
@@ -821,18 +831,14 @@
                               Kategori.Navn AS Kategori,
                               Events.Beskrivelse,
                               Events.Img,
-                              Events.Bynavn,
-                              Events.Postnr,
                               Events.Adresse,
-                              CONCAT(Events.Adresse, ', ', Events.Postnr, ', ', Events.Bynavn) AS Sted,
                               Godkendt
                        FROM Events JOIN Brugere ON FkBrugerId = Brugere.Id
                                    JOIN Kategori ON FkKategoriId = Kategori.Id
                        WHERE Events.Id = @Id"
-        InsertCommand="INSERT INTO Events(Navn, Adresse, Beskrivelse, StartDato, SlutDato, Img, FkBrugerId, Godkendt, FkKategoriId, Bynavn, Postnr, StartTid, SlutTid) 
-                             VALUES(@Navn, @Adresse, @Beskrivelse, @StartDato, @SlutDato, @Img, @BrugerId, @Bypass, @KategoriId, @Bynavn, @Postnr, @StartTid, @SlutTid)"
+        InsertCommand="INSERT INTO Events(Navn, Adresse, Beskrivelse, StartDato, SlutDato, Img, FkBrugerId, Godkendt, FkKategoriId, StartTid, SlutTid, Lat, Long) 
+                             VALUES(@Navn, @Adresse, @Beskrivelse, @StartDato, @SlutDato, @Img, @BrugerId, @Bypass, @KategoriId, @StartTid, @SlutTid, @Lat, @Long);"
         UpdateCommand="UPDATE Events SET Navn = @Navn,
-                                         Adresse = @Adresse,
                                          Beskrivelse = @Beskrivelse,
                                          StartDato = @StartDato,
                                          SlutDato = @SlutDato,
@@ -840,8 +846,6 @@
                                          FkBrugerId = @BrugerId,
                                          Godkendt = @Bypass,
                                          FkKategoriId = @KategoriId,
-                                         Bynavn = @Bynavn,
-                                         Postnr = @Postnr,
                                          StartTid = @StartTid,
                                          SlutTid = @SlutTid
                        WHERE Events.Id = @Id"
@@ -850,16 +854,22 @@
         OnInserting="SqlDataSourceEventDetaljer_Inserting"
         OnUpdating="SqlDataSourceEventDetaljer_Updating"
         OnDeleting="SqlDataSourceEventDetaljer_Deleting"
-        OnInserted="OnSqlChanged"
+        OnInserted="SqlDataSourceEventDetaljer_Inserted"
         OnDeleted="OnSqlChanged"
-        OnUpdated="OnSqlChanged">
+        OnUpdated="SqlDataSourceEventDetaljer_Updated">
         <SelectParameters>
             <asp:ControlParameter ControlID="GridViewEvents" Name="Id" Type="Int32" />
         </SelectParameters>
         <InsertParameters>
             <asp:Parameter Name="Img" Type="String" DefaultValue="noimg.jpg" />
             <asp:SessionParameter Name="Bypass" DefaultValue="0" SessionField="Bypass" Type="String" />
+            <asp:SessionParameter Name="Lat" type="String" SessionField="lat"/>
+            <asp:SessionParameter Name="Long" type="String" SessionField="long"/>
+            <asp:SessionParameter Name="Adresse" type="String" SessionField="address"/>
         </InsertParameters>
+        <UpdateParameters>
+            <asp:SessionParameter Name="Bypass" DefaultValue="0" SessionField="Bypass" Type="String" />
+        </UpdateParameters>
     </asp:SqlDataSource>
 
     <!--DataSource til DropDownListInsert/UpdateBruger-->
@@ -914,18 +924,14 @@
                               Kategori.Navn AS Kategori,
                               Events.Beskrivelse,
                               Events.Img,
-                              Events.Bynavn,
-                              Events.Postnr,
                               Events.Adresse,
-                              CONCAT(Events.Adresse, ', ', Events.Postnr, ', ', Events.Bynavn) AS Sted,
                               Godkendt
                        FROM Events JOIN Brugere ON FkBrugerId = Brugere.Id
                                    JOIN Kategori ON FkKategoriId = Kategori.Id
                        WHERE Events.Id = @Id"
-        InsertCommand="INSERT INTO Events(Navn, Adresse, Beskrivelse, StartDato, SlutDato, Img, FkBrugerId, Godkendt, FkKategoriId, Bynavn, Postnr, StartTid, SlutTid) 
-                             VALUES(@Navn, @Adresse, @Beskrivelse, @StartDato, @SlutDato, @Img, @BrugerId, @Bypass, @KategoriId, @Bynavn, @Postnr, @StartTid, @SlutTid)"
+        InsertCommand="INSERT INTO Events(Navn, Adresse, Beskrivelse, StartDato, SlutDato, Img, FkBrugerId, Godkendt, FkKategoriId, StartTid, SlutTid, Lat, Long) 
+                             VALUES(@Navn, @Adresse, @Beskrivelse, @StartDato, @SlutDato, @Img, @BrugerId, @Bypass, @KategoriId, @StartTid, @SlutTid, @Lat, @Long)"
         UpdateCommand="UPDATE Events SET Navn = @Navn,
-                                         Adresse = @Adresse,
                                          Beskrivelse = @Beskrivelse,
                                          StartDato = @StartDato,
                                          SlutDato = @SlutDato,
@@ -933,8 +939,6 @@
                                          Godkendt = @Bypass,
                                          FkBrugerId = @BrugerId,
                                          FkKategoriId = @KategoriId,
-                                         Bynavn = @Bynavn,
-                                         Postnr = @Postnr,
                                          StartTid = @StartTid,
                                          SlutTid = @SlutTid
                        WHERE Events.Id = @Id"
@@ -943,9 +947,9 @@
         OnInserting="SqlDataSourceEgenEvent_Inserting"
         OnUpdating="SqlDataSourceEgenEvent_Updating"
         OnDeleting="SqlDataSourceEgenEvent_Deleting"
-        OnInserted="OnSqlChanged"
+        OnInserted="SqlDataSourceEgenEvent_Inserted"
         OnDeleted="OnSqlChanged"
-        OnUpdated="OnSqlChanged">
+        OnUpdated="SqlDataSourceEgenEvent_Updated">
         <SelectParameters>
             <asp:ControlParameter ControlID="GridViewEgneEvents" Name="Id" Type="Int32" />
         </SelectParameters>
@@ -953,9 +957,13 @@
             <asp:SessionParameter SessionField="Id" Name="BrugerId" Type="String" />
             <asp:Parameter Name="Img" Type="String" DefaultValue="noimg.jpg" />
             <asp:SessionParameter Name="Bypass" DefaultValue="0" SessionField="Bypass" Type="String" />
+            <asp:SessionParameter Name="Lat" Type="String" SessionField="lat" />
+            <asp:SessionParameter Name="Long" Type="String" SessionField="long" />
+            <asp:SessionParameter Name="Adresse" Type="String" SessionField="address" />
         </InsertParameters>
         <UpdateParameters>
             <asp:SessionParameter SessionField="Id" Name="BrugerId" Type="String" />
+            <asp:SessionParameter Name="Bypass" DefaultValue="0" SessionField="Bypass" Type="String" />
         </UpdateParameters>
     </asp:SqlDataSource>
 

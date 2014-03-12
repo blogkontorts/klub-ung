@@ -10,6 +10,15 @@ using System.Data.SqlClient;
 
 public partial class location:System.Web.UI.Page {
     protected void Page_Load(object sender, EventArgs e) {
+        if (Request.Form["submitPosition"] == "true")
+        {
+            string lat = Request.Form["lat"];
+            string lon = Request.Form["long"];
+            string address = Request.Form["address"];
+            Session["lat"] = lat;
+            Session["long"] = lon;
+            Session["address"] = address;
+        }
     }
 
 
@@ -17,7 +26,7 @@ public partial class location:System.Web.UI.Page {
     public string ConvertDataTabletoString() {
         DataTable dt = new DataTable();
         using(SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ToString())) {
-            using(SqlCommand cmd = new SqlCommand("SELECT lat,long,Navn,Beskrivelse FROM EventLocation INNER JOIN [Events] ON EventLocation.Id = [Events].FkLokationId", con)) {
+            using(SqlCommand cmd = new SqlCommand("SELECT Lat, Long, Navn, Beskrivelse FROM Events", con)) {
                 con.Open();
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 da.Fill(dt);
