@@ -187,22 +187,8 @@
                     <tr>
                         <td>Adresse:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxInsertEventAdresse" runat="server" CssClass="form-control" Text='<%#Bind("Adresse") %>'></asp:TextBox>
-                            <asp:Label ID="TextBoxInsertEventAdresseMsg" runat="server" Text=""></asp:Label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>By:</td>
-                        <td>
-                            <asp:TextBox ID="TextBoxInsertEventBy" runat="server" CssClass="form-control" Text='<%#Bind("Bynavn") %>'></asp:TextBox>
-                            <asp:Label ID="TextBoxInsertEventByMsg" runat="server" Text=""></asp:Label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Postnr:</td>
-                        <td>
-                            <asp:TextBox ID="TextBoxInsertEventPostnr" runat="server" CssClass="form-control" Text='<%#Bind("Postnr") %>'></asp:TextBox>
-                            <asp:Label ID="TextBoxInsertEventPostnrMsg" runat="server" Text=""></asp:Label>
+                            <asp:Label ID="LabelMapDescription" runat="server" Text="Indtast adressen på din event og tryk på submit"></asp:Label>
+                            <embed src="../location.aspx" width="500" height="500" />
                         </td>
                     </tr>
                     <tr>
@@ -224,8 +210,7 @@
                                 TodayDayStyle-BackColor="#5cb85c"
                                 OnDayRender="CalendarInsertEventFra_DayRender"></asp:Calendar>
                             <asp:Label ID="CalendarInsertEventFraMsg" runat="server" Text=""></asp:Label>
-                        </td>
-                        <td>
+                        
                             <asp:Label ID="LabelInsertEventStartTid" runat="server" Text="Tid:"></asp:Label>
                             <asp:TextBox ID="TextBoxInsertEventStartTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("StartTid") %>'></asp:TextBox>
                             <asp:Label ID="TextBoxInsertEventStartTidMsg" runat="server" Text=""></asp:Label>
@@ -250,8 +235,7 @@
                                 TodayDayStyle-BackColor="#5cb85c"
                                 OnDayRender="CalendarInsertEventTil_DayRender"></asp:Calendar>
                             <asp:Label ID="CalendarInsertEventTilMsg" runat="server" Text=""></asp:Label>
-                        </td>
-                        <td>
+                        
                             <asp:Label ID="LabelInsertEventSlutTid" runat="server" Text="Tid:"></asp:Label>
                             <asp:TextBox ID="TextBoxInsertEventSlutTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("SlutTid") %>'></asp:TextBox>
                             <asp:Label ID="TextBoxInsertEventSlutTidMsg" runat="server" Text=""></asp:Label>
@@ -312,22 +296,8 @@
                     <tr>
                         <td>Adresse:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxUpdateEventAdresse" runat="server" CssClass="form-control" Text='<%#Bind("Adresse") %>'></asp:TextBox>
-                            <asp:Label ID="TextBoxUpdateEventAdresseMsg" runat="server" Text=""></asp:Label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>By:</td>
-                        <td>
-                            <asp:TextBox ID="TextBoxUpdateEventBy" runat="server" CssClass="form-control" Text='<%#Bind("Bynavn") %>'></asp:TextBox>
-                            <asp:Label ID="TextBoxUpdateEventByMsg" runat="server" Text=""></asp:Label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Postnr:</td>
-                        <td>
-                            <asp:TextBox ID="TextBoxUpdateEventPostnr" runat="server" CssClass="form-control" Text='<%#Bind("Postnr") %>'></asp:TextBox>
-                            <asp:Label ID="TextBoxUpdateEventPostnrMsg" runat="server" Text=""></asp:Label>
+                            <asp:Label ID="LabelMapDescription" runat="server" Text="Indtast adressen på din event og tryk på submit"></asp:Label>
+                            <embed src="../location.aspx" width="500" height="500" />
                         </td>
                     </tr>
                     <tr>
@@ -350,8 +320,7 @@
                                 OnDayRender="CalendarUpdateEventFra_DayRender"></asp:Calendar>
                             <asp:Label ID="LabelUpdateEventFra" runat="server" Text='<%#"Nuværende: " + Eval("StartDato", "{0:d}") %>'></asp:Label>
                             <asp:Label ID="CalendarUpdateEventFraMsg" runat="server" Text=""></asp:Label>
-                        </td>
-                        <td>
+                        
                             <asp:Label ID="LabelUpdateEventStartTid" runat="server" Text="Tid:"></asp:Label>
                             <asp:TextBox ID="TextBoxUpdateEventStartTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("StartTid") %>'></asp:TextBox>
                             <asp:Label ID="TextBoxUpdateEventStartTidMsg" runat="server" Text=""></asp:Label>
@@ -377,8 +346,7 @@
                                 OnDayRender="CalendarUpdateEventTil_DayRender"></asp:Calendar>
                             <asp:Label ID="LabelUpdateEventTil" runat="server" Text='<%#"Nuværende: " + Eval("SlutDato", "{0:d}") %>'></asp:Label>
                             <asp:Label ID="CalendarUpdateEventTilMsg" runat="server" Text=""></asp:Label>
-                        </td>
-                        <td>
+                        
                             <asp:Label ID="LabelUpdateEventSlutTid" runat="server" Text="Tid:"></asp:Label>
                             <asp:TextBox ID="TextBoxUpdateEventSlutTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("SlutTid") %>'></asp:TextBox>
                             <asp:Label ID="TextBoxUpdateEventSlutTidMsg" runat="server" Text=""></asp:Label>
@@ -601,22 +569,8 @@
                     <tr>
                         <td>Adresse:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxInsertEventAdresse" runat="server" CssClass="form-control" Text='<%#Bind("Adresse") %>'></asp:TextBox>
-                            <asp:Label ID="TextBoxInsertEventAdresseMsg" runat="server" Text=""></asp:Label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>By:</td>
-                        <td>
-                            <asp:TextBox ID="TextBoxInsertEventBy" runat="server" CssClass="form-control" Text='<%#Bind("Bynavn") %>'></asp:TextBox>
-                            <asp:Label ID="TextBoxInsertEventByMsg" runat="server" Text=""></asp:Label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Postnr:</td>
-                        <td>
-                            <asp:TextBox ID="TextBoxInsertEventPostnr" runat="server" CssClass="form-control" Text='<%#Bind("Postnr") %>'></asp:TextBox>
-                            <asp:Label ID="TextBoxInsertEventPostnrMsg" runat="server" Text=""></asp:Label>
+                            <asp:Label ID="LabelMapDescription" runat="server" Text="Indtast adressen på din event og tryk på submit"></asp:Label>
+                            <embed src="../location.aspx" width="500" height="500" />
                         </td>
                     </tr>
                     <tr>
@@ -638,8 +592,7 @@
                                 TodayDayStyle-BackColor="#5cb85c"
                                 OnDayRender="CalendarInsertEgenEventFra_DayRender"></asp:Calendar>
                             <asp:Label ID="CalendarInsertEventFraMsg" runat="server" Text=""></asp:Label>
-                        </td>
-                        <td>
+                        
                             <asp:Label ID="LabelInsertEventStartTid" runat="server" Text="Tid:"></asp:Label>
                             <asp:TextBox ID="TextBoxInsertEventStartTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("StartTid") %>'></asp:TextBox>
                             <asp:Label ID="TextBoxInsertEventStartTidMsg" runat="server" Text=""></asp:Label>
@@ -664,8 +617,7 @@
                                 TodayDayStyle-BackColor="#5cb85c"
                                 OnDayRender="CalendarInsertEgenEventTil_DayRender"></asp:Calendar>
                             <asp:Label ID="CalendarInsertEventTilMsg" runat="server" Text=""></asp:Label>
-                        </td>
-                        <td>
+                        
                             <asp:Label ID="LabelInsertEventSlutTid" runat="server" Text="Tid:"></asp:Label>
                             <asp:TextBox ID="TextBoxInsertEventSlutTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("SlutTid") %>'></asp:TextBox>
                             <asp:Label ID="TextBoxInsertEventSlutTidMsg" runat="server" Text=""></asp:Label>
@@ -720,22 +672,8 @@
                     <tr>
                         <td>Adresse:</td>
                         <td>
-                            <asp:TextBox ID="TextBoxUpdateEventAdresse" runat="server" CssClass="form-control" Text='<%#Bind("Adresse") %>'></asp:TextBox>
-                            <asp:Label ID="TextBoxUpdateEventAdresseMsg" runat="server" Text=""></asp:Label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>By:</td>
-                        <td>
-                            <asp:TextBox ID="TextBoxUpdateEventBy" runat="server" CssClass="form-control" Text='<%#Bind("Bynavn") %>'></asp:TextBox>
-                            <asp:Label ID="TextBoxUpdateEventByMsg" runat="server" Text=""></asp:Label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Postnr:</td>
-                        <td>
-                            <asp:TextBox ID="TextBoxUpdateEventPostnr" runat="server" CssClass="form-control" Text='<%#Bind("Postnr") %>'></asp:TextBox>
-                            <asp:Label ID="TextBoxUpdateEventPostnrMsg" runat="server" Text=""></asp:Label>
+                            <asp:Label ID="LabelMapDescription" runat="server" Text="Indtast adressen på din event og tryk på submit"></asp:Label>
+                            <embed src="../location.aspx" width="500" height="500" />
                         </td>
                     </tr>
                     <tr>
@@ -758,8 +696,7 @@
                                 OnDayRender="CalendarUpdateEgenEventFra_DayRender"></asp:Calendar>
                             <asp:Label ID="LabelUpdateEventFra" runat="server" Text='<%#"Nuværende: " + Eval("StartDato", "{0:d}") %>'></asp:Label>
                             <asp:Label ID="CalendarUpdateEventFraMsg" runat="server" Text=""></asp:Label>
-                        </td>
-                        <td>
+                        
                             <asp:Label ID="LabelUpdateEventStartTid" runat="server" Text="Tid:"></asp:Label>
                             <asp:TextBox ID="TextBoxUpdateEventStartTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("StartTid") %>'></asp:TextBox>
                             <asp:Label ID="TextBoxUpdateEventStartTidMsg" runat="server" Text=""></asp:Label>
@@ -785,8 +722,7 @@
                                 OnDayRender="CalendarUpdateEgenEventTil_DayRender"></asp:Calendar>
                             <asp:Label ID="LabelUpdateEventTil" runat="server" Text='<%#"Nuværende: " + Eval("SlutDato", "{0:d}") %>'></asp:Label>
                             <asp:Label ID="CalendarUpdateEventTilMsg" runat="server" Text=""></asp:Label>
-                        </td>
-                        <td>
+                        
                             <asp:Label ID="LabelUpdateEventSlutTid" runat="server" Text="Tid:"></asp:Label>
                             <asp:TextBox ID="TextBoxUpdateEventSlutTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("StartTid") %>'></asp:TextBox>
                             <asp:Label ID="TextBoxUpdateEventSlutTidMsg" runat="server" Text=""></asp:Label>
