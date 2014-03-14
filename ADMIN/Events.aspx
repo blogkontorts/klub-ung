@@ -392,43 +392,6 @@
         </div>
 
         <div class="col-sm-12"></div>
-
-        <div class="col-sm-2">
-            <h3>Kategorier</h3>
-            <asp:GridView
-                ID="GridViewKategorier"
-                runat="server"
-                AutoGenerateColumns="False"
-                DataKeyNames="Id"
-                DataSourceID="SqlDataSourceKategoriGridView"
-                EmptyDataText="Ingen kategorier fundet."
-                AllowSorting="True"
-                CssClass="table table-striped"
-                BorderStyle="None"
-                GridLines="None"
-                AllowPaging="True">
-                <Columns>
-                    <asp:TemplateField ShowHeader="false">
-                        <ItemTemplate>
-                            <asp:LinkButton 
-                                ID="LinkButtonSlet" 
-                                CssClass="btn btn-xs btn-danger" 
-                                CommandArgument='<%#Eval("Id") %>' 
-                                CausesValidation="false" 
-                                runat="server"
-                                CommandName="Delete">
-                                <span class="glyphicon glyphicon-remove"></span>
-                            </asp:LinkButton>
-                        </ItemTemplate>
-                    </asp:TemplateField>
-                    <asp:BoundField DataField="Id" HeaderText="Id" ReadOnly="True" InsertVisible="False" SortExpression="Id" Visible="false"></asp:BoundField>
-                    <asp:BoundField DataField="Navn" HeaderText="Navn" ReadOnly="True" InsertVisible="False" SortExpression="Navn"></asp:BoundField>
-                </Columns>
-            </asp:GridView>
-            <asp:TextBox ID="TextBoxAddKategori" runat="server" CssClass="form-control"></asp:TextBox>
-            <asp:Label ID="TextBoxAddKategoriMsg" runat="server" Text=""></asp:Label>
-            <asp:Button ID="ButtonAddKategori" CssClass="btn btn-sm btn-success btn-fix" runat="server" Text="Tilføj kategori" OnClick="ButtonAddKategori_Click" />
-        </div>
     </asp:Panel>
     <!--Admin View End-->
 
@@ -807,7 +770,7 @@
                               Godkendt
                        FROM Events JOIN Brugere ON FkBrugerId = Brugere.Id
                                    JOIN Kategori ON FkKategoriId = Kategori.Id
-                       WHERE Events.Slettet = 0 AND Events.Navn LIKE '%'+@Search+'%'"
+                       WHERE Events.Slettet = 0 AND (Events.Navn LIKE '%'+@Search+'%' OR Brugere.Navn LIKE '%'+@Search+'%')"
         DeleteCommand="UPDATE Events SET Slettet = 1 WHERE Id = @Id">
         <SelectParameters>
             <asp:ControlParameter ControlID="TextBoxSearch" DefaultValue="%" Name="Search" Type="String" />
@@ -965,15 +928,6 @@
             <asp:SessionParameter SessionField="Id" Name="BrugerId" Type="String" />
             <asp:SessionParameter Name="Bypass" DefaultValue="0" SessionField="Bypass" Type="String" />
         </UpdateParameters>
-    </asp:SqlDataSource>
-
-    <!--DataSource til GridViewKategorier-->
-    <asp:SqlDataSource 
-        ID="SqlDataSourceKategoriGridView" 
-        runat="server" 
-        ConnectionString='<%$ ConnectionStrings:ConnectionString %>' 
-        SelectCommand="SELECT * FROM Kategori WHERE Slettet = 0"
-        DeleteCommand="UPDATE Kategori SET Slettet = 1 WHERE Id = @Id">
     </asp:SqlDataSource>
 </asp:Content>
 

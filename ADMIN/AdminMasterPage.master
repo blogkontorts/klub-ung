@@ -34,6 +34,8 @@
                         <li><a href="Events.aspx"><span class="glyphicon glyphicon-star"></span> Events</a></li>
                         <li>
                             <asp:HyperLink ID="HyperLinkRettigheder" Visible="false" runat="server" NavigateUrl="~/ADMIN/Rettigheder.aspx"><span class="glyphicon glyphicon-list"></span> Rettigheder</asp:HyperLink></li>
+                        <li>
+                            <asp:HyperLink ID="HyperLinkDiverse" Visible="false" runat="server" NavigateUrl="~/ADMIN/Diverse.aspx"><span class="glyphicon glyphicon-wrench"></span> Diverse</asp:HyperLink></li>
                         </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li>

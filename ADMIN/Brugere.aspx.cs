@@ -19,6 +19,7 @@ public partial class ADMIN_Brugere : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        PanelSearch.DefaultButton = "LinkButtonSearch";
         try
         {
             ArrayList UserPermissionArr = (ArrayList)Session["UserPermissions"];

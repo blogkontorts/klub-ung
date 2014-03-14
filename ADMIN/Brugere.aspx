@@ -10,7 +10,7 @@
         </div>
         <div class="col-sm-6">
             <h3>Brugere</h3>
-            <div class="input-group input-group-lg Search">
+            <asp:Panel ID="PanelSearch" CssClass="input-group input-group-lg Search" runat="server">
                 <span class="input-group-btn">
                     <asp:LinkButton ID="LinkButtonSearch" CssClass="btn btn-info" runat="server" OnClick="LinkButtonSearch_Click"><span class="glyphicon glyphicon-search"></span></asp:LinkButton>
                 </span>
@@ -18,7 +18,7 @@
                 <span class="input-group-btn">
                     <asp:LinkButton ID="LinkButtonCancelSearch" Visible="false" CssClass="btn btn-danger" runat="server" OnClick="LinkButtonCancelSearch_Click"><span class="glyphicon glyphicon-remove"></span></asp:LinkButton>
                 </span>
-            </div>
+            </asp:Panel>
             <asp:GridView
                 ID="GridViewBrugere"
                 runat="server"
@@ -383,7 +383,7 @@
         ID="SqlDataSourceDropDownListStatus" 
         runat="server"
         ConnectionString="<%$ ConnectionStrings:ConnectionString %>"
-        SelectCommand="SELECT Id AS RolleId, Navn AS RolleNavn FROM Roller ORDER BY RolleId DESC">
+        SelectCommand="SELECT Id AS RolleId, Navn AS RolleNavn FROM Roller WHERE Navn != 'Gæst' ORDER BY RolleId DESC">
     </asp:SqlDataSource>
 
     <!--DataSource til FormViewEgenBruger-->

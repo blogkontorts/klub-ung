@@ -401,28 +401,6 @@ public partial class ADMIN_Events : System.Web.UI.Page
             File.Delete(Server.MapPath("../Thumbs/" + FilNavn));
         }
     }
-    #endregion  
-
-    //---------------------------------------Tilføj Kategori
-    #region Tilføj kategori
-    protected void ButtonAddKategori_Click(object sender, EventArgs e)
-    {
-        if (!string.IsNullOrWhiteSpace(TextBoxAddKategori.Text))
-        {
-            //opret et SqlCommand object
-            SqlCommand cmd = new SqlCommand("INSERT INTO Kategori (Navn) VALUES (@Navn)", conn);
-            cmd.Parameters.Add("@Navn", SqlDbType.NVarChar).Value = TextBoxAddKategori.Text;
-
-            // åben forbindelsen til databasen
-            conn.Open();
-            cmd.ExecuteNonQuery();
-            conn.Close();
-            GridViewKategorier.DataBind();
-            TextBoxAddKategori.Text = "";
-        }
-        else
-            TextBoxAddKategoriMsg.Text = "Skal udfyldes";
-    }
     #endregion
 
     //---------------------------------------Søgning
@@ -449,7 +427,7 @@ public partial class ADMIN_Events : System.Web.UI.Page
     protected void FormViewEventDetaljer_ItemInserting(object sender, FormViewInsertEventArgs e)
     {
         FormView Form = (FormView)sender as FormView;
-        Validate(Form, "Insert", e);
+        InsertValidate(Form, "Insert", e);
         Calendar FraKalender = Form.FindControl("CalendarInsertEventFra") as Calendar;
         Calendar TilKalender = Form.FindControl("CalendarInsertEventTil") as Calendar;
         if (FraKalender.SelectedDate.Date == DateTime.MinValue.Date)
@@ -470,7 +448,7 @@ public partial class ADMIN_Events : System.Web.UI.Page
     protected void FormViewEventDetaljer_ItemUpdating(object sender, FormViewUpdateEventArgs e)
     {
         FormView Form = (FormView)sender as FormView;
-        Validate(Form, "Update", e);
+        UpdateValidate(Form, "Update", e);
         Calendar FraKalender = Form.FindControl("CalendarUpdateEventFra") as Calendar;
         Calendar TilKalender = Form.FindControl("CalendarUpdateEventTil") as Calendar;
         if (FraKalender.SelectedDate.Date == DateTime.MinValue.Date)
@@ -488,16 +466,28 @@ public partial class ADMIN_Events : System.Web.UI.Page
         }
     }
 
-    protected void Validate(FormView Form, string Action, dynamic e)
+    protected void InsertValidate(FormView Form, string Action, dynamic e)
     {
         
         //Valider unikt navn og at det er udfyldt
-        Validator.ValidateUniqeness(Form, "TextBox"+Action+"EventNavn", "Events", "Navn", "Id", e, GetId());
+        Validator.ValidateUniqeness(Form, "TextBox"+Action+"EventNavn", "Events", "Navn", "Id", e);
         //Valider at tider er udfyldt korrekt
-        Validator.ValidatePattern("TextBox" + Action + "EventStartTid", e, Form, @"^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$", "Udfyld et tidspunkt");
-        Validator.ValidatePattern("TextBox" + Action + "EventSlutTid", e, Form, @"^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$", "Udfyld et tidspunkt");
+        Validator.ValidatePattern("TextBox" + Action + "EventStartTid", e, Form, @"^([0-1][0-9]|2[0-3]):([0-5][0-9])(?::([0-5][0-9]))?$", "Udfyld et tidspunkt");
+        Validator.ValidatePattern("TextBox" + Action + "EventSlutTid", e, Form, @"^([0-1][0-9]|2[0-3]):([0-5][0-9])(?::([0-5][0-9]))?$", "Udfyld et tidspunkt");
         //Valider at beskrivelsen er udfyldt
         Validator.ValidateEmpty("TextBox"+Action+"EventBeskrivelse", e, Form);
+    }
+
+    protected void UpdateValidate(FormView Form, string Action, dynamic e)
+    {
+        //Valider unikt navn og at det er udfyldt
+        Validator.ValidateUniqeness(Form, "TextBox" + Action + "EventNavn", "Events", "Navn", "Id", e, GetId());
+        //Valider at tider er udfyldt korrekt
+        Validator.ValidatePattern("TextBox" + Action + "EventStartTid", e, Form, @"^([0-1][0-9]|2[0-3]):([0-5][0-9])(?::([0-5][0-9]))?$", "Udfyld et tidspunkt");
+        Validator.ValidatePattern("TextBox" + Action + "EventSlutTid", e, Form, @"^([0-1][0-9]|2[0-3]):([0-5][0-9])(?::([0-5][0-9]))?$", "Udfyld et tidspunkt");
+        //Valider at beskrivelsen er udfyldt
+        Validator.ValidateEmpty("TextBox" + Action + "EventBeskrivelse", e, Form);
+
     }
 
     protected int GetId()

@@ -8,10 +8,15 @@ using System.Configuration;
 using System.Data;
 
 /// <summary>
-/// Summary description for Validering
+/// Valideringsklasse til Grid- og FormViews
 /// </summary>
 public class Validering
 {
+    public Validering()
+    {
+        //Constructor
+    }
+
     public void ValidateUniqeness(Control Parent, string ControllerName, string TableName, string ColumnName, string SelfColumnName, object e, int Id = 0)
     {
         int Match;
@@ -84,11 +89,24 @@ public class Validering
     }
 
     //Validerer tomme felter (Som i: Må ikke være tomt)
-    public void ValidateEmpty(string ControllerName, dynamic e, FormView FormViewName)
+    public void ValidateEmpty(string ControllerName, dynamic e, Control Parent)
     {
-        if (String.IsNullOrWhiteSpace((FormViewName.FindControl(ControllerName) as TextBox).Text))
+        if (Parent.GetType() == typeof(FormView))
         {
-            CancelAndDisplayMessage(FormViewName, ControllerName, "Skal udfyldes", e);
+            if (String.IsNullOrWhiteSpace((Parent.FindControl(ControllerName) as TextBox).Text))
+            {
+                CancelAndDisplayMessage(Parent, ControllerName, "Skal udfyldes", e);
+            }
+        }
+        else if (Parent.GetType() == typeof(GridView))
+        {
+            GridView Grid = (GridView)Parent as GridView;
+            GridViewRow Row = Grid.Rows[e.RowIndex];
+            if (String.IsNullOrWhiteSpace((Row.FindControl(ControllerName) as TextBox).Text))
+            {
+                e.Cancel = true;
+                (Row.FindControl(ControllerName + "Msg") as Label).Text = "Skal udfyldes";
+            }
         }
     }
 
@@ -107,21 +125,6 @@ public class Validering
         {
             e.Cancel = true;
             (FormViewName.FindControl(ControllerName + "Msg") as Label).Text = Besked;
-        }
-    }
-
-    //Validerer
-    protected bool RegexValidate(string Pattern, string Content)
-    {
-        RegexStringValidator Validator = new RegexStringValidator(Pattern);
-        try
-        {
-            Validator.Validate(Content);
-            return true;
-        }
-        catch (ArgumentException)
-        {
-            return false;
         }
     }
 }

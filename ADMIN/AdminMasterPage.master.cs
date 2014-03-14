@@ -15,7 +15,10 @@ public partial class ADMIN_AdminMasterPage : System.Web.UI.MasterPage
             Response.Redirect("../login.aspx");
 
         if (UserPermissionArr.Contains("AdminRettigheder"))
+        {
             HyperLinkRettigheder.Visible = true;
+            HyperLinkDiverse.Visible = true;
+        }
     }
 
     protected void ButtonLogout_Click(object sender, EventArgs e)
