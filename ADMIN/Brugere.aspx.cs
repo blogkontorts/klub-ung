@@ -22,8 +22,7 @@ public partial class ADMIN_Brugere : System.Web.UI.Page
         PanelSearch.DefaultButton = "LinkButtonSearch";
         try
         {
-            ArrayList UserPermissionArr = (ArrayList)Session["UserPermissions"];
-            if (UserPermissionArr.Contains("AdminBrugere"))
+            if (GetRights().Contains("AdminBrugere"))
             {
                 PanelAdminView.Visible = true;
                 PanelUserView.Visible = false;
@@ -35,6 +34,12 @@ public partial class ADMIN_Brugere : System.Web.UI.Page
         }
     }
     Validering Validator = new Validering();
+
+    protected ArrayList GetRights()
+    {
+        ArrayList UserPermissionArr = (ArrayList)Session["UserPermissions"];
+        return UserPermissionArr;
+    }
 
     protected void OnSqlChanged(Object source, SqlDataSourceStatusEventArgs e)
     {
@@ -306,7 +311,21 @@ public partial class ADMIN_Brugere : System.Web.UI.Page
     protected void Validate(FormView Form, string Action, dynamic e)
     {
         //Valider unikt navn og at det er udfyldt
-        Validator.ValidateUniqeness(Form, "TextBox" + Action + "BrugerNavn", "Brugere", "Navn", "Id", e);
+        if (GetRights().Contains("AdminEvents"))
+        {
+            if (e.GetType() == typeof(FormViewInsertEventArgs))
+            {
+                Validator.ValidateUniqeness(Form, "TextBox" + Action + "BrugerNavn", "Brugere", "Navn", "Id", e);
+            }
+            else if (e.GetType() == typeof(FormViewUpdateEventArgs))
+            {
+                Validator.ValidateUniqeness(Form, "TextBox" + Action + "BrugerNavn", "Brugere", "Navn", "Id", e, Convert.ToInt32(GridViewBrugere.SelectedValue));
+            }
+        }
+        else
+        {
+            Validator.ValidateUniqeness(Form, "TextBox" + Action + "BrugerNavn", "Brugere", "Navn", "Id", e, Convert.ToInt32(Session["Id"]));
+        }
         //Valider at password er udfyldt
         Validator.ValidateEmpty("TextBox" + Action + "BrugerPassword", e, Form);
         //Valider at email er udfyldt og er en gyldig email
