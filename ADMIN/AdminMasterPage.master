@@ -7,6 +7,7 @@
     <title></title>
     <link href="../Content/bootstrap.min.css" rel="stylesheet" />
     <link href="../CSS/Overrides.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="../Images/favicon.png" />
     <asp:ContentPlaceHolder id="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>

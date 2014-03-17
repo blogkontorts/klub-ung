@@ -33,17 +33,10 @@
                 GridLines="None"
                 AllowPaging="True">
                 <Columns>
-                    <asp:TemplateField ShowHeader="false">
+                    <asp:TemplateField>
                         <ItemTemplate>
-                            <asp:LinkButton 
-                                ID="LinkButtonSlet" 
-                                CssClass="btn btn-xs btn-danger" 
-                                CommandArgument='<%#Eval("Id") %>' 
-                                CausesValidation="false" 
-                                runat="server"
-                                OnClick="LinkButtonSlet_Click">
-                                <span class="glyphicon glyphicon-remove"></span>
-                            </asp:LinkButton>
+                            <asp:CheckBox ID="CheckBoxSelectItem" runat="server" />
+                            <asp:Label ID="LabelSelectItem" Text='<%#Eval("Id") %>' Visible="false" runat="server"></asp:Label>
                         </ItemTemplate>
                     </asp:TemplateField>
                     <asp:BoundField DataField="Id" HeaderText="Id" ReadOnly="True" InsertVisible="False" SortExpression="Id" Visible="false"></asp:BoundField>
@@ -72,7 +65,7 @@
                                 <asp:LinkButton 
                                     Visible='<%# IsApproved(Eval("Godkendt")) %>' 
                                     ID="LinkButtonAfvis" 
-                                    CssClass="btn btn-xs btn-danger" 
+                                    CssClass="btn btn-xs btn-warning" 
                                     OnClick="LinkButtonAfvis_Click" 
                                     CommandArgument='<%#Eval("Id") %>'
                                     runat="server"><span class="glyphicon glyphicon-thumbs-down"></span>
@@ -88,6 +81,11 @@
                     </asp:TemplateField>
                 </Columns>
             </asp:GridView>
+            <div class="btn-group btn-group-lg">
+                <asp:LinkButton ID="LinkButtonDelSelect" runat="server" CssClass="btn btn-sm btn-danger" Text="" OnClick="LinkButtonDelSelect_Click"><span class="glyphicon glyphicon-remove"></span> Slet valgte</asp:LinkButton>
+                <asp:LinkButton ID="LinkButtonApproveSelected" CssClass="btn btn-sm btn-success" runat="server" Text="" OnClick="LinkButtonApproveSelected_Click"><span class="glyphicon glyphicon-thumbs-up"></span> Godkend valgte</asp:LinkButton>
+                <asp:LinkButton ID="LinkButtonDenySelected" CssClass="btn btn-sm btn-warning" runat="server" Text="Afvis valgte" OnClick="LinkButtonDenySelected_Click"><span class="glyphicon glyphicon-thumbs-down"></span> Afvis valgte</asp:LinkButton>
+            </div>
         </div>
 
         <div class="col-sm-6">

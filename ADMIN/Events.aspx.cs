@@ -72,6 +72,7 @@ public partial class ADMIN_Events : System.Web.UI.Page
             FormViewEgenEventDetaljer.ChangeMode(FormViewMode.ReadOnly);
     }
     #endregion
+
     //Check om en given event er godkendt eller ej
     //Return: Bool
     protected bool IsApproved(object Eval)
@@ -613,7 +614,8 @@ public partial class ADMIN_Events : System.Web.UI.Page
     }
     #endregion
 
-
+    //---------------------------------------Gem koordinater og adresse i session
+    #region Koordinater + adresse
     protected void SqlDataSourceEventDetaljer_Inserted(object sender, SqlDataSourceStatusEventArgs e)
     {      
         Session["lat"] = null;
@@ -642,4 +644,83 @@ public partial class ADMIN_Events : System.Web.UI.Page
         Session["address"] = null;
         OnSqlChanged(sender, e);
     }
+    #endregion
+
+    //----------------------------------------Styring af multi-select (checkboxe)
+    #region Checkboxe
+    protected void LinkButtonDelSelect_Click(object sender, EventArgs e)
+    {
+        if (GetRights().Contains("AdminEvents"))
+        {
+            DeleteSelected(GridViewEvents);
+        }
+        else
+        {
+            DeleteSelected(GridViewEgneEvents);
+        }
+        
+    }
+
+    protected void DeleteSelected(GridView Grid)
+    {
+        foreach (GridViewRow row in Grid.Rows)
+        {
+            CheckBox CheckBoxSelectItem = (CheckBox)row.FindControl("CheckBoxSelectItem");
+            Label LabelSelectItem = (Label)row.FindControl("LabelSelectItem");
+
+            if (CheckBoxSelectItem.Checked)
+            {
+                int Id = Convert.ToInt32(LabelSelectItem.Text);
+                SqlCommand cmd = new SqlCommand("UPDATE Events SET Slettet = 1 WHERE Id = @Id", conn);
+                cmd.Parameters.Add("@Id", SqlDbType.NVarChar).Value = Id;
+
+                // åben forbindelsen til databasen
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                conn.Close();
+                Grid.DataBind();
+            }
+        } 
+    }
+
+
+
+    protected void ApproveDenySelected(GridView Grid, int Action)
+    {
+        foreach (GridViewRow row in Grid.Rows)
+        {
+            CheckBox CheckBoxSelectItem = (CheckBox)row.FindControl("CheckBoxSelectItem");
+            Label LabelSelectItem = (Label)row.FindControl("LabelSelectItem");
+
+            if (CheckBoxSelectItem.Checked)
+            {
+                int Id = Convert.ToInt32(LabelSelectItem.Text);
+                SqlCommand cmd = new SqlCommand("UPDATE Events SET Godkendt = @Action WHERE Id = @Id", conn);
+                cmd.Parameters.Add("@Id", SqlDbType.NVarChar).Value = Id;
+                cmd.Parameters.Add("@Action", SqlDbType.NVarChar).Value = Action;
+
+
+                // åben forbindelsen til databasen
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                conn.Close();
+                Grid.DataBind();
+            }
+        }
+    }
+    protected void LinkButtonApproveSelected_Click(object sender, EventArgs e)
+    {
+        if (GetRights().Contains("AdminEvents"))
+            ApproveDenySelected(GridViewEvents, 1);
+        else
+            ApproveDenySelected(GridViewEgneEvents, 1);
+    }
+    protected void LinkButtonDenySelected_Click(object sender, EventArgs e)
+    {
+        if (GetRights().Contains("AdminEvents"))
+            ApproveDenySelected(GridViewEvents, 0);
+        else
+            ApproveDenySelected(GridViewEgneEvents, 0);
+    }
+    #endregion CheckBoxe
 }
