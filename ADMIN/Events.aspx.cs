@@ -197,7 +197,7 @@ public partial class ADMIN_Events : System.Web.UI.Page
         string NytFilnavn = Tid + "_" + f.FileName;
         f.SaveAs(Server.MapPath("../Images/") + NytFilnavn);
         // Kald Metoden MakeThumbs, som laver en Thumbnail og uploader den til Thumbs mappen
-        MakeThumb(NytFilnavn, "/Images/", 172, "/Thumbs/");
+        MakeThumb(NytFilnavn, "/Images/", 250, "/Thumbs/");
         return NytFilnavn;
     }
 
