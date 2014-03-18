@@ -733,6 +733,7 @@
         </asp:FormView>
     </div>
     </asp:Panel>
+    <div class="col-sm-12 Mover"></div>
     <!--User View End-->
 
     <!--
