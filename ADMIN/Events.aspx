@@ -118,12 +118,12 @@
                     <tr>
                         <td>Fra:</td>
                         <td>
-                            <asp:Label ID="LabelEventStartDato" runat="server" Text='<%#Eval("StartDato", "{0:dd MMMM, yyyy}")+" - "+Eval("StartTid")%>'></asp:Label></td>
+                            <asp:Label ID="LabelEventStartDato" runat="server" Text='<%#Eval("StartDato", "{0:dd MMMM, yyyy}")+" - "+Eval("StartTid", "{0:HH:mm}")%>'></asp:Label></td>
                     </tr>
                     <tr>
                         <td>Til:</td>
                         <td>
-                            <asp:Label ID="LabelEventSlutDato" runat="server" Text='<%#Eval("SlutDato", "{0:dd MMMM, yyyy}")+" - "+ Eval("SlutTid") %>'></asp:Label></td>
+                            <asp:Label ID="LabelEventSlutDato" runat="server" Text='<%#Eval("SlutDato", "{0:dd MMMM, yyyy}")+" - "+ Eval("SlutTid", "{0:HH:mm}") %>'></asp:Label></td>
                     </tr>
                     <tr>
                         <td>Kategori:</td>
@@ -324,7 +324,7 @@
                             <asp:Label ID="CalendarUpdateEventFraMsg" runat="server" Text=""></asp:Label>
                             <br />
                             <asp:Label ID="LabelUpdateEventStartTid" runat="server" Text="Tid:"></asp:Label>
-                            <asp:TextBox ID="TextBoxUpdateEventStartTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("StartTid") %>'></asp:TextBox>
+                            <asp:TextBox ID="TextBoxUpdateEventStartTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("StartTid", "{0:HH:mm}") %>'></asp:TextBox>
                             <asp:Label ID="TextBoxUpdateEventStartTidMsg" runat="server" Text=""></asp:Label>
                         </td>
                     </tr>
@@ -351,7 +351,7 @@
                             <asp:Label ID="CalendarUpdateEventTilMsg" runat="server" Text=""></asp:Label>
                             <br />
                             <asp:Label ID="LabelUpdateEventSlutTid" runat="server" Text="Tid:"></asp:Label>
-                            <asp:TextBox ID="TextBoxUpdateEventSlutTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("SlutTid") %>'></asp:TextBox>
+                            <asp:TextBox ID="TextBoxUpdateEventSlutTid" CssClass="form-control" placeholder="ex: 00:00" runat="server" Text='<%#Bind("SlutTid", "{0:HH:mm}") %>'></asp:TextBox>
                             <asp:Label ID="TextBoxUpdateEventSlutTidMsg" runat="server" Text=""></asp:Label>
                         </td>
                     </tr>
