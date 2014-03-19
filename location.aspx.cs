@@ -21,7 +21,6 @@ public partial class location:System.Web.UI.Page {
         }
     }
 
-
     // This method is used to convert datatable to json string
     public string ConvertDataTabletoString() {
         DataTable dt = new DataTable();
