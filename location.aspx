@@ -89,7 +89,8 @@
         function MakeMap() {
             //hentet datatable fra backend og convertere det således at 
             //det kan bruges i javascript
-            datatable = JSON.parse('<%=ConvertDataTabletoString() %>');
+            //String replace bruges til at håndtere linjeskifte. Ellers breaker google map
+            datatable = JSON.parse('<%=ConvertDataTabletoString() %>'.replace(/(\r\n|\n|\r\\)/gm, " "));
             //hvor kortete skal starte kordinaterne ræpresentere roskilde
             defaultlatlog = new google.maps.LatLng(55.642446, 12.084052);
             //sætter kortopsætning  
