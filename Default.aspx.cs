@@ -11,4 +11,11 @@ public partial class _Default : System.Web.UI.Page
     {
 
     }
+    protected string Truncate(int Length, object EvalIndhold)
+    {
+        string Indhold = EvalIndhold.ToString();
+        if (Indhold.Length > Length)
+            Indhold = Indhold.Substring(0, Length) + "...";
+        return Indhold;
+    }
 }

@@ -1,0 +1,192 @@
+﻿body {
+}
+
+.m-eventcard:first-child{
+    margin-top:52px;
+}
+.m-eventcard{
+    margin-top:7px;
+    height:100%;
+    float:left;
+    width:100%;
+}
+    .m-eventcard:hover .m-event .m-hex{
+        height:230px;
+        border-radius:0 0 6px 6px;
+
+    }
+    .m-eventcard:hover .m-event .m-hex .m-text{
+        bottom:100px;
+    }
+.m-date{
+    float:left;
+    width:30px;
+}
+.m-link:nth-child(3n+1){
+    visibility:hidden;
+    position:absolute;
+    -webkit-transform:translate(-30px, 58px);
+    transform:translate(-30px, 58px);
+    -moz-transform:translate(-30px, 58px);
+}
+.m-link:nth-child(3n+2){
+    visibility:hidden;
+    position:absolute;
+    -webkit-transform:translate(-30px, 116px);
+    transform:translate(-30px, 116px);
+    -moz-transform:translate(-30px, 116px);
+}
+.m-link:nth-child(3n){
+    visibility:hidden;
+    position:absolute;
+    -webkit-transform:translate(-30px, 174px);
+    transform:translate(-30px, 174px);
+    -moz-transform:translate(-30px, 174px);
+}
+.m-eventcard:hover .m-link {
+    visibility:visible;
+}
+.m-event {
+    float:inherit;
+    width:80%;
+}
+    .m-event .m-hex {
+        width:100%;
+        top:30px;
+        left:20px;
+    }
+        .m-event .m-hex .m-headline {
+            position:absolute;
+            top:-6px;
+            left:5px;
+            right:5px;
+            display:block;
+            padding:2px;
+            background-color:rgba(209, 202, 147, 0.84);
+            border-radius:6px 6px 0 0;
+            line-height:13px;
+            text-align:center;
+            font-size:13px;
+            font-weight:bold;
+        }
+        .m-event .m-hex .m-text{
+        position:absolute;
+        top:22px;
+        left:5px;
+        right:5px;
+        bottom:-6px;
+        display:block;
+        background-color:rgba(209, 202, 147, 0.84);
+        border-radius:0 0 6px 6px;
+        padding:3px;
+        overflow:hidden;
+        line-height:11px;
+        font-size:11px;
+    }
+.m-day {
+    position:absolute;
+    left:-2px;
+    top:0px;
+    right:-2px;
+    text-align:center;
+    font-weight:bold;
+}
+.m-time {
+    position:absolute;
+    left:-5px;
+    top:30px;
+}
+.m-link .m-hex span{
+    color:white;
+    font-size:25px;
+    left:2px;
+    top:15px;
+}
+.m-pic {
+
+    background:url(cardPicSizetester.jpg) center;
+    max-width:250px;
+    position:absolute;
+    border-radius: 6px;
+    top:125px;
+    bottom:5px;
+    right:5px;
+    left:5px;
+}
+.m-event .m-pic {
+    right:5px;
+}
+.m-hex:before {
+    content: " ";
+    width: 0; height: 0;
+    border-right: 15px solid #6C6;
+    border-top: 26px solid transparent;
+    border-bottom: 26px solid transparent;
+    position: absolute;
+    left: -15px;
+}
+
+.m-hex {
+    left:2px;
+    width: 30px;
+    height: 52px;
+    background-color: #6C6;
+    position: relative;
+}
+
+.m-date .m-hex:after{
+    content: "";
+    width: 0;
+    position: absolute;
+    right: -15px;
+    border-left: 15px solid #6C6;
+    border-top: 26px solid transparent;
+    border-bottom: 26px solid transparent;
+}
+.m-link .m-hex:before {
+     content: " ";
+    width: 0; height: 0;
+    border-right: 15px solid #414141;
+    border-top: 26px solid transparent;
+    border-bottom: 26px solid transparent;
+    position: absolute;
+}
+.m-link .m-hex:after {
+    content: "";
+    width: 0;
+    position: absolute;
+    right: -15px;
+    border-left: 15px solid #414141;
+    border-top: 26px solid transparent;
+    border-bottom: 26px solid transparent;
+}
+
+/*.m-hex:before {
+    content: " ";
+    width: 0; height: 0;
+    border-right: 30px solid #6C6;
+    border-top: 52px solid transparent;
+    border-bottom: 52px solid transparent;
+    position: absolute;
+    left: -30px;
+}
+
+.m-hex {
+    left:16px;
+    top:-15px;
+    width: 60px;
+    height: 104px;
+    background-color: #6C6;
+    position: relative;
+    -webkit-transform:scale(0.5);
+}
+
+.m-date .m-hex:after {
+    content: "";
+    width: 0;
+    position: absolute;
+    right: -30px;
+    border-left: 30px solid #6C6;
+    border-top: 52px solid transparent;
+    border-bottom: 52px solid transparent;
+}*/
